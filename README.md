@@ -51,4 +51,4 @@
 
 ## 예상 화면
 
-[예상 화면도](https://github.com/lionleeee/vanilla-figma-spa/wiki/%EC%98%88%EC%83%81-%ED%99%94%EB%A9%B4%EB%8F%84)
+[예상 화면도](https://github.com/f-lab-edu/vanilla-figma-spa/wiki/%ED%99%94%EB%A9%B4-%EC%98%88%EC%83%81%EB%8F%84)
