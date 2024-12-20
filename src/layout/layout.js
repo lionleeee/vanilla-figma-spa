@@ -1,4 +1,5 @@
 import './Header.js';
+import './Footer.js';
 export default class Layout extends HTMLElement {
   constructor() {
     super();
@@ -10,8 +11,8 @@ export default class Layout extends HTMLElement {
     this.innerHTML = `
       <app-header></app-header>
         <main></main>
-
-      <footer>푸터</footer>
+      <app-footer></app-footer>
+      
     `;
   }
 }
