@@ -13,7 +13,6 @@ export default class Layout extends HTMLElement {
         </nav>
       </header>
       <main>
-        레이아웃
       </main>
       <footer>
         <p>© 2024 SPA App</p>
