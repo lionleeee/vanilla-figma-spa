@@ -1,3 +1,4 @@
+import './Header.js';
 export default class Layout extends HTMLElement {
   constructor() {
     super();
@@ -7,11 +8,7 @@ export default class Layout extends HTMLElement {
   }
   render() {
     this.innerHTML = `
-      <header>
-        <nav>
-          <a href="/" data-link>홈</a>
-        </nav>
-      </header>
+      <app-header/>
       <main>
       </main>
       <footer>

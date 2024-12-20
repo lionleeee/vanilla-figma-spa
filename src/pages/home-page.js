@@ -2,7 +2,7 @@ export default class HomePage extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
       <div>
-        <h1>홈</h1>
+        <h1>홈입니다</h1>
       </div>
     `;
   }
