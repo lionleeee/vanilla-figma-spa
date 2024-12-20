@@ -8,7 +8,7 @@ export default class Layout extends HTMLElement {
   }
   render() {
     this.innerHTML = `
-      <app-header/>
+      <app-header></app-header>
         <main></main>
       <footer>
         <p>© 2024 SPA App</p>
