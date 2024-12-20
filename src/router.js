@@ -1,5 +1,11 @@
 class Router {
+  static instance = null;
   constructor() {
+    if (Router.instance) {
+      return Router.instance;
+    }
+    Router.instance = this;
+
     this.routes = new Map();
 
     window.addEventListener('popstate', () => {
