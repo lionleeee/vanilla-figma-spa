@@ -144,3 +144,22 @@
   color: #666;
   text-decoration: none;
 }
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .layer-sidebar,
+  .tools-sidebar {
+    height: auto;
+
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .main-canvas {
+    min-height: 400px;
+  }
+}
