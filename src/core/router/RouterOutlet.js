@@ -1,6 +1,10 @@
 export default class RouterOutlet extends HTMLElement {
+  static instance = null;
+
   constructor() {
     super();
+
+    RouterOutlet.instance = this;
   }
 
   connectedCallback() {
@@ -9,6 +13,14 @@ export default class RouterOutlet extends HTMLElement {
 
   render() {
     this.innerHTML = '';
+  }
+
+  disconnectedCallback() {
+    RouterOutlet.instance = null;
+  }
+
+  static getInstance() {
+    return RouterOutlet.instance;
   }
 }
 

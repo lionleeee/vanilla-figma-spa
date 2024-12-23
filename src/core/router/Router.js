@@ -1,3 +1,5 @@
+import RouterOutlet from './RouterOutlet.js';
+
 class Router {
   static instance = null;
   constructor() {
@@ -29,7 +31,7 @@ class Router {
   handleRoute(pathname) {
     const component = this.routes.get(pathname) || this.routes.get('*');
     if (component) {
-      const outlet = document.querySelector('router-outlet');
+      const outlet = RouterOutlet.getInstance();
       if (outlet) {
         outlet.innerHTML = '';
         outlet.appendChild(new component());
