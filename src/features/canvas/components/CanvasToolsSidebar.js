@@ -1,4 +1,5 @@
 import './ToolButton.js';
+import './PropertyInput.js';
 
 export default class CanvasToolsSidebar extends HTMLElement {
   constructor() {
@@ -34,11 +35,17 @@ export default class CanvasToolsSidebar extends HTMLElement {
 
       <div class="property-group">
         <h2 class="section-title">설정</h2>
-        <label class="input-label">가로</label>
-        <input type="number" class="input-field" placeholder="Width" />
+        <property-input
+          type="number"
+          label="가로"
+          placeholder="Width">
+        </property-input>
 
-        <label class="input-label">세로</label>
-        <input type="number" class="input-field" placeholder="Height" />
+        <property-input
+          type="number"
+          label="세로"
+          placeholder="Height">
+        </property-input>
 
         <label class="input-label">투명도</label>
         <input type="range" class="range-slider" min="0" max="100" value="100" />
