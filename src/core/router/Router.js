@@ -29,10 +29,10 @@ class Router {
   handleRoute(pathname) {
     const component = this.routes.get(pathname) || this.routes.get('*');
     if (component) {
-      const main = document.querySelector('main');
-      if (main) {
-        main.innerHTML = '';
-        main.appendChild(new component());
+      const outlet = document.querySelector('router-outlet');
+      if (outlet) {
+        outlet.innerHTML = '';
+        outlet.appendChild(new component());
       }
     }
   }
