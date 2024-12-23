@@ -47,8 +47,13 @@ export default class CanvasToolsSidebar extends HTMLElement {
           placeholder="Height">
         </property-input>
 
-        <label class="input-label">투명도</label>
-        <input type="range" class="range-slider" min="0" max="100" value="100" />
+        <property-input
+          type="range"
+          label="투명도"
+          min="0"
+          max="100"
+          value="100">
+        </property-input>
       </div>
 
       <button class="reset-button">초기화</button>
