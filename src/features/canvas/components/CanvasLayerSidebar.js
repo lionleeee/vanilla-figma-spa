@@ -1,4 +1,4 @@
-export default class LayerSidebar extends HTMLElement {
+export default class CanvasLayerSidebar extends HTMLElement {
   constructor() {
     super();
   }
@@ -17,4 +17,4 @@ export default class LayerSidebar extends HTMLElement {
   }
 }
 
-customElements.define('app-layer-sidebar', LayerSidebar);
+customElements.define('canvas-layer-sidebar', CanvasLayerSidebar);

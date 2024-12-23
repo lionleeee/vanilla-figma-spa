@@ -1,4 +1,4 @@
-export default class ToolsSideBar extends HTMLElement {
+export default class CanvasToolsSidebar extends HTMLElement {
   constructor() {
     super();
   }
@@ -85,4 +85,4 @@ export default class ToolsSideBar extends HTMLElement {
   }
 }
 
-customElements.define('app-tools-sidebar', ToolsSideBar);
+customElements.define('canvas-tools-sidebar', CanvasToolsSidebar);
