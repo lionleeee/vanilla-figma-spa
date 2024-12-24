@@ -2,10 +2,6 @@ import './ToolButton.js';
 import './PropertyInput.js';
 
 export default class CanvasToolsSidebar extends HTMLElement {
-  constructor() {
-    super();
-  }
-
   connectedCallback() {
     this.render();
   }

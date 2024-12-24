@@ -3,10 +3,6 @@ export default class ToolButton extends HTMLElement {
     return ['icon-path', 'label'];
   }
 
-  constructor() {
-    super();
-  }
-
   connectedCallback() {
     this.render();
   }

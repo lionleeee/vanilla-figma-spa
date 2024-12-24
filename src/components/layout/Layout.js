@@ -5,10 +5,6 @@ import '../../core/router/RouterOutlet.js';
 export default class Layout extends HTMLElement {
   static observedAttributes = ['header', 'footer'];
 
-  constructor() {
-    super();
-  }
-
   connectedCallback() {
     this.render();
   }

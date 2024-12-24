@@ -3,10 +3,6 @@ export default class PropertyInput extends HTMLElement {
     return ['label', 'type', 'placeholder', 'min', 'max', 'value'];
   }
 
-  constructor() {
-    super();
-  }
-
   connectedCallback() {
     this.render();
   }

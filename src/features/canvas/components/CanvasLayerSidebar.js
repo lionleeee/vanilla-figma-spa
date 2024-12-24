@@ -1,8 +1,4 @@
 export default class CanvasLayerSidebar extends HTMLElement {
-  constructor() {
-    super();
-  }
-
   connectedCallback() {
     this.render();
   }
