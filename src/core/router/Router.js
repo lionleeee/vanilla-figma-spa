@@ -1,17 +1,21 @@
+import CanvasPage from '../../features/canvas/pages/CanvasPage.js';
 import RouterOutlet from './RouterOutlet.js';
+
+const routes = {
+  '/': { component: CanvasPage },
+  '*': { component: CanvasPage },
+};
 
 class Router {
   static instance = null;
+
   constructor() {
     if (Router.instance) {
       return Router.instance;
     }
     Router.instance = this;
 
-    this.routes = new Map([
-      ['/', { component: CanvasPage }],
-      ['*', { component: CanvasPage }],
-    ]);
+    this.routes = new Map(Object.entries(routes));
 
     window.addEventListener('popstate', () => {
       this.handleRoute(window.location.pathname);
@@ -26,18 +30,13 @@ class Router {
     });
   }
 
-  addRoute(path, component) {
-    this.routes.set(path, component);
-    return this;
-  }
-
   handleRoute(pathname) {
-    const component = this.routes.get(pathname) || this.routes.get('*');
-    if (component) {
+    const route = this.routes.get(pathname) || this.routes.get('*');
+    if (route) {
       const outlet = RouterOutlet.getInstance();
       if (outlet) {
         outlet.innerHTML = '';
-        outlet.appendChild(new component());
+        outlet.appendChild(new route.component());
       }
     }
   }
