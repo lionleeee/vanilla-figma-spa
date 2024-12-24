@@ -8,7 +8,10 @@ class Router {
     }
     Router.instance = this;
 
-    this.routes = new Map();
+    this.routes = new Map([
+      ['/', { component: CanvasPage }],
+      ['*', { component: CanvasPage }],
+    ]);
 
     window.addEventListener('popstate', () => {
       this.handleRoute(window.location.pathname);
