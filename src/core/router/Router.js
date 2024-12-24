@@ -1,17 +1,6 @@
-import CanvasPage from '../../features/canvas/pages/CanvasPage.js';
 import Layout from '../../components/layout/Layout.js';
 import RouterOutlet from './RouterOutlet.js';
-
-const routes = {
-  '/': {
-    component: CanvasPage,
-    layout: Layout,
-  },
-  '*': {
-    component: CanvasPage,
-    layout: Layout,
-  },
-};
+import { routes } from './RouterConfig.js';
 
 class Router {
   static instance = null;
@@ -43,7 +32,9 @@ class Router {
       const app = document.querySelector('#app');
       if (route.layout) {
         app.innerHTML = '';
-        const layout = new route.layout();
+        const layout = new Layout();
+        layout.setAttribute('header', route.layout.header);
+        layout.setAttribute('footer', route.layout.footer);
         app.appendChild(layout);
       }
 

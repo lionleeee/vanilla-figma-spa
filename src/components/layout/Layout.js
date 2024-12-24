@@ -3,6 +3,8 @@ import './Footer.js';
 import '../../core/router/RouterOutlet.js';
 
 export default class Layout extends HTMLElement {
+  static observedAttributes = ['header', 'footer'];
+
   constructor() {
     super();
   }
@@ -12,10 +14,12 @@ export default class Layout extends HTMLElement {
   }
 
   render() {
+    const headerTag = this.getAttribute('header') || '';
+    const footerTag = this.getAttribute('footer') || '';
     this.innerHTML = `
-      <app-header></app-header>
+      ${headerTag ? `<${headerTag}></${headerTag}>` : ''}
       <router-outlet></router-outlet>
-      <app-footer></app-footer>
+      ${footerTag ? `<${footerTag}></${footerTag}>` : ''}
     `;
   }
 }
