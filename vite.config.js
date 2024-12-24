@@ -14,7 +14,6 @@ export default defineConfig(({ mode }) => {
       include: ['./src/core/router/Router.js'],
     },
     build: {
-      minify: isDev,
       minify: !isDev,
       sourcemap: isDev,
       chunkSizeWarningLimit: 500,
