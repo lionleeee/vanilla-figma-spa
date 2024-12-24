@@ -1,9 +1,16 @@
 import CanvasPage from '../../features/canvas/pages/CanvasPage.js';
+import Layout from '../../components/layout/Layout.js';
 import RouterOutlet from './RouterOutlet.js';
 
 const routes = {
-  '/': { component: CanvasPage },
-  '*': { component: CanvasPage },
+  '/': {
+    component: CanvasPage,
+    layout: Layout,
+  },
+  '*': {
+    component: CanvasPage,
+    layout: Layout,
+  },
 };
 
 class Router {
@@ -33,6 +40,13 @@ class Router {
   handleRoute(pathname) {
     const route = this.routes.get(pathname) || this.routes.get('*');
     if (route) {
+      const app = document.querySelector('#app');
+      if (route.layout) {
+        app.innerHTML = '';
+        const layout = new route.layout();
+        app.appendChild(layout);
+      }
+
       const outlet = RouterOutlet.getInstance();
       if (outlet) {
         outlet.innerHTML = '';
