@@ -1,5 +1,5 @@
-import '../components/CanvasLayerSidebar.js';
-import '../components/CanvasToolsSidebar.js';
+import '../features/canvas/components/CanvasLayerSidebar.js';
+import '../features/canvas/components/CanvasToolsSidebar.js';
 
 export default class CanvasPage extends HTMLElement {
   connectedCallback() {

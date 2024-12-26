@@ -1,6 +1,16 @@
 import Layout from '../../components/layout/Layout.js';
+import CanvasPage from '../../pages/CanvasPage.js';
 import RouterOutlet from './RouterOutlet.js';
-import { routes } from './RouterConfig.js';
+
+export const routes = {
+  '*': {
+    component: CanvasPage,
+    layout: {
+      header: 'app-header',
+      footer: 'app-footer',
+    },
+  },
+};
 
 class Router {
   static instance = null;
