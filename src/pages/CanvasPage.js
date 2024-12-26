@@ -1,15 +1,12 @@
 import '../features/canvas/components/CanvasLayerSidebar.js';
 import '../features/canvas/components/CanvasToolsSidebar.js';
-
+import '../features/canvas/components/CanvasArea.js';
 export default class CanvasPage extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
       <div class="container">
         <canvas-layer-sidebar></canvas-layer-sidebar>
-        <div class="main-canvas">
-          <div class="canvas-area">
-          </div>
-        </div>
+          <canvas-area></canvas-area>
         <canvas-tools-sidebar></canvas-tools-sidebar>
       </div>
     `;
