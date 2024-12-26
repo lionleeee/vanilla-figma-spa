@@ -5,6 +5,7 @@ export default class ToolButton extends HTMLElement {
 
   connectedCallback() {
     this.render();
+    this.addEventListeners();
   }
 
   render() {
@@ -19,6 +20,19 @@ export default class ToolButton extends HTMLElement {
         ${label}
       </button>
     `;
+  }
+
+  addEventListeners() {
+    const button = this.querySelector('.tool-button');
+    button.addEventListener('click', () => {
+      const event = new CustomEvent('tool-selected', {
+        bubbles: true,
+        detail: {
+          tool: this.getAttribute('label'),
+        },
+      });
+      this.dispatchEvent(event);
+    });
   }
 }
 
