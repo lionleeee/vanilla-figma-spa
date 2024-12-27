@@ -1,3 +1,5 @@
+import { layerService } from './LayerService.js';
+
 export default class DrawingService {
   constructor(context) {
     this.context = context;
@@ -42,6 +44,7 @@ export default class DrawingService {
   drawRectangle(x, y) {
     this.context.fillStyle = 'red';
     this.context.fillRect(x - 25, y - 25, 50, 50);
+    layerService.addLayer('사각형', x, y);
   }
 
   drawCircle(x, y) {
@@ -49,6 +52,7 @@ export default class DrawingService {
     this.context.fillStyle = 'blue';
     this.context.arc(x, y, 25, 0, Math.PI * 2);
     this.context.fill();
+    layerService.addLayer('원형', x, y);
   }
 
   drowText(x, y) {
@@ -58,5 +62,6 @@ export default class DrawingService {
     this.context.fillStyle = 'black';
     this.context.font = '20px Arial';
     this.context.fillText(text, x, y);
+    layerService.addLayer('텍스트', x, y);
   }
 }
