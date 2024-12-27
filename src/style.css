@@ -210,3 +210,26 @@
   color: #666;
   font-size: 12px;
 }
+
+.layer-name {
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+
+.layer-name:hover {
+  background: #f0f0f0;
+}
+
+.layer-name-input {
+  width: 120px;
+  padding: 2px 4px;
+  border: 1px solid #e0e0e0;
+  border-radius: 2px;
+  font-size: 14px;
+  outline: none;
+}
+
+.layer-name-input:focus {
+  border-color: #000;
+}

@@ -6,7 +6,7 @@ class LayerService {
       return LayerService.instance;
     }
     LayerService.instance = this;
-
+    this.currentZIndex = 0;
     this.layers = [];
     this.counters = {
       사각형: 0,
@@ -24,10 +24,19 @@ class LayerService {
       type,
       x,
       y,
+      z: ++this.currentZIndex,
     };
     this.layers.unshift(layer);
     this.notifyLayerUpdate();
     return layer;
+  }
+
+  updateLayerName(id, newName) {
+    const layer = this.layers.find((layer) => layer.id === id);
+    if (layer) {
+      layer.name = newName;
+      this.notifyLayerUpdate();
+    }
   }
 
   notifyLayerUpdate() {

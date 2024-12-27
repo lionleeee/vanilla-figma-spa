@@ -1,3 +1,5 @@
+import { layerService } from '../services/LayerService.js';
+
 export default class CanvasLayerSidebar extends HTMLElement {
   constructor() {
     super();
@@ -14,6 +16,44 @@ export default class CanvasLayerSidebar extends HTMLElement {
       this.layers = e.detail.layers;
       this.renderLayers();
     });
+
+    this.addEventListener('click', (e) => {
+      const layerName = e.target.closest('.layer-name');
+      if (layerName) {
+        const layerItem = layerName.closest('.layer-item');
+        const id = Number(layerItem.dataset.id);
+        this.startEditing(layerName, id);
+      }
+    });
+  }
+
+  startEditing(nameElement, layerId) {
+    const currentName = nameElement.textContent;
+    const input = document.createElement('input');
+    input.value = currentName;
+    input.className = 'layer-name-input';
+
+    const finishEditing = () => {
+      const newName = input.value.trim();
+      if (newName && newName !== currentName) {
+        layerService.updateLayerName(layerId, newName);
+      } else {
+        this.renderLayers();
+      }
+    };
+
+    input.addEventListener('blur', finishEditing);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        finishEditing();
+      } else if (e.key === 'Escape') {
+        this.renderLayers();
+      }
+    });
+
+    nameElement.replaceWith(input);
+    input.focus();
+    input.select();
   }
 
   render() {
