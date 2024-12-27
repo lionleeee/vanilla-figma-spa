@@ -37,13 +37,6 @@ class LayerService {
       })
     );
   }
-
-  static getInstance() {
-    if (!LayerService.instance) {
-      LayerService.instance = new LayerService();
-    }
-    return LayerService.instance;
-  }
 }
 
-export const layerService = LayerService.getInstance();
+export const layerService = new LayerService();
