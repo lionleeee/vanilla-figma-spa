@@ -25,7 +25,7 @@ class LayerService {
       x,
       y,
     };
-    this.layers.unshift(layer); // 새 레이어를 맨 앞에 추가
+    this.layers.unshift(layer);
     this.notifyLayerUpdate();
     return layer;
   }

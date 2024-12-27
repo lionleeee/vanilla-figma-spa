@@ -40,6 +40,8 @@
   background: white;
   border-right: 1px solid #e0e0e0;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 .section-title {
   font-size: 16px;
@@ -171,12 +173,26 @@
   .main-canvas {
     min-height: 400px;
   }
+
+  .layer-sidebar {
+    height: auto;
+    width: 100%;
+    max-height: 300px;
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .layer-list {
+    max-height: 230px;
+  }
 }
 
 .layer-list {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  overflow-y: auto;
+  flex: 1;
 }
 
 .layer-item {
