@@ -16,7 +16,6 @@ export class ToolService {
   }
 
   getCurrentTool() {
-    console.log(this.currentTool);
     return this.currentTool;
   }
 }
