@@ -31,20 +31,39 @@ export default class CanvasLayerSidebar extends HTMLElement {
     this.addEventListener('dragover', (e) => {
       e.preventDefault();
       const targetItem = e.target.closest('.layer-item');
-
-      //2-1 타겟이 동일 할 경우
-      if (targetItem === previousTarget) return;
+      const layerList = this.querySelector('.layer-list');
+      const draggingItem = document.querySelector('.dragging');
+      //2-1. 타겟이 동일하거나 드래그 중인 요소인 경우 제외
+      if (targetItem === previousTarget || targetItem === draggingItem) return;
 
       //2-2. 이전 타겟 클래스 제거
       if (previousTarget) {
         previousTarget.classList.remove('drop-above', 'drop-below');
       }
 
-      //2-3. 타겟이 없을 경우
-      if (!targetItem) return;
+      if (!targetItem) {
+        // 레이어 최상단, 최하단 확인
+        const firstItem = layerList.firstElementChild;
+        const lastItem = layerList.lastElementChild;
+
+        if (firstItem && e.clientY < firstItem.getBoundingClientRect().top) {
+          // 맨 위
+          firstItem.classList.add('drop-above');
+          previousTarget = firstItem;
+        } else if (
+          lastItem &&
+          e.clientY > lastItem.getBoundingClientRect().bottom
+        ) {
+          // 맨 아래
+          lastItem.classList.add('drop-below');
+          previousTarget = lastItem;
+        }
+        return;
+      }
 
       //2-4. 현재 드래그 위치 계산
       const targetArea = targetItem.getBoundingClientRect();
+
       const middleY = targetArea.top + targetArea.height / 2;
       const isAbove = e.clientY < middleY;
 
