@@ -1,30 +1,31 @@
 import { layerService } from '.././LayerService.js';
 import { ShapeRenderer } from './ShapeRender.js';
-
+import { toolService } from './ToolService.js';
 export default class DrawingService {
   constructor(context) {
     this.context = context;
     this.canvas = this.context.canvas;
-    this.currentTool = null;
     this.shapeRenderer = new ShapeRenderer(context);
+
     this.addEventListeners();
   }
 
   addEventListeners() {
     this.canvasClickEvent();
     this.canvasMouseMoveEvent();
-    this.toolSelectedEvent();
   }
 
   canvasMouseMoveEvent() {
     this.canvas.addEventListener('mousemove', (e) => {
-      this.canvas.style.cursor = this.currentTool ? 'crosshair' : 'default';
+      this.canvas.style.cursor = toolService.getCurrentTool()
+        ? 'crosshair'
+        : 'default';
     });
   }
 
   canvasClickEvent() {
     this.canvas.addEventListener('click', (e) => {
-      if (!this.currentTool) return;
+      if (!toolService.getCurrentTool()) return;
       const point = this.getCanvasPoint(e);
       this.handleDrawing(point);
     });
@@ -39,8 +40,7 @@ export default class DrawingService {
   }
 
   handleDrawing({ x, y }) {
-    console.log(x, y);
-    switch (this.currentTool) {
+    switch (toolService.getCurrentTool()) {
       case '사각형':
         this.shapeRenderer.drawRectangle(x, y);
         layerService.addLayer('rectangle', x, y);
@@ -58,10 +58,6 @@ export default class DrawingService {
     }
   }
 
-  setTool(toolName) {
-    this.currentTool = toolName;
-  }
-
   clearCanvas() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     layerService.clearLayers();
@@ -70,14 +66,5 @@ export default class DrawingService {
   resizeCanvas(width, height) {
     this.canvas.width = width;
     this.canvas.height = height;
-  }
-
-  getCurrentTool() {
-    return this.currentTool;
-  }
-  toolSelectedEvent() {
-    document.addEventListener('tool-selected', (e) => {
-      this.setTool(e.detail.tool);
-    });
   }
 }
