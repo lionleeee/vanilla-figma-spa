@@ -9,14 +9,15 @@ class LayerService {
     this.currentZIndex = 0;
     this.layers = [];
     this.counters = {
-      사각형: 0,
-      원형: 0,
-      직선: 0,
-      텍스트: 0,
+      rectangle: 0,
+      circle: 0,
+      line: 0,
+      text: 0,
     };
   }
 
   addLayer(type, x, y) {
+    console.log(type, x, y);
     this.counters[type]++;
     const layer = {
       id: Date.now(),
