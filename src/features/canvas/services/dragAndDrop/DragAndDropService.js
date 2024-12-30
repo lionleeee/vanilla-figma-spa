@@ -64,6 +64,7 @@ export default class DragAndDropService {
 
     DragStyleHandler.addDropLocation(targetItem, isAbove);
     this.stateManager.setPreviousTarget(targetItem);
+    this.stateManager.setDropPosition(isAbove);
   }
 
   handleEdgeDrop(e, layerList) {
@@ -73,9 +74,11 @@ export default class DragAndDropService {
     if (DragPositionCalculator.isAboveFirstItem(e, firstItem)) {
       DragStyleHandler.addDropLocation(firstItem, true);
       this.stateManager.setPreviousTarget(firstItem);
+      this.stateManager.setDropPosition(true);
     } else if (DragPositionCalculator.isBelowLastItem(e, lastItem)) {
       DragStyleHandler.addDropLocation(lastItem, false);
       this.stateManager.setPreviousTarget(lastItem);
+      this.stateManager.setDropPosition(false);
     }
   }
 
@@ -100,6 +103,7 @@ export default class DragAndDropService {
       detail: {
         target: this.stateManager.previousTarget,
         data: e.dataTransfer.getData('text/plain'),
+        isAbove: this.stateManager.dropPosition,
       },
     });
     this.container.dispatchEvent(dropEvent);

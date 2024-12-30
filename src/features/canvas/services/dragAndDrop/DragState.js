@@ -2,6 +2,7 @@ export default class DragStateManager {
   constructor() {
     this.previousTarget = null;
     this.draggingItem = null;
+    this.dropPosition = null;
   }
 
   setPreviousTarget(target) {
@@ -12,9 +13,14 @@ export default class DragStateManager {
     this.draggingItem = item;
   }
 
+  setDropPosition(position) {
+    this.dropPosition = position;
+  }
+
   clearState() {
     this.previousTarget = null;
     this.draggingItem = null;
+    this.dropPosition = null;
   }
 
   isPreviousTarget(target) {

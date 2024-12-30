@@ -20,12 +20,14 @@ export default class CanvasLayerSidebar extends HTMLElement {
   }
 
   handleDrop(e) {
-    const { target, data } = e.detail;
+    const { target, data, isAbove } = e.detail;
     console.log('Dropped Data:', data);
     console.log('Dropped on:', target);
+    console.log('Drop Position:', isAbove);
 
     if (target) {
       //TODO : 레이어 업데이트
+      layerService.changeLayerZIndex(data, target, isAbove);
     }
 
     this.renderLayers();
