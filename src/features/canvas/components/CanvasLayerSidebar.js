@@ -1,5 +1,6 @@
+import DragAndDropService from '../services/dragAndDrop/DragAndDropService.js';
 import { layerService } from '../services/LayerService.js';
-import DragAndDropService from '../services/DragAndDropService.js';
+
 export default class CanvasLayerSidebar extends HTMLElement {
   constructor() {
     super();
