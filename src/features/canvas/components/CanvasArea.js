@@ -1,4 +1,4 @@
-import DrawingService from '../services/draw/DrawingService';
+import DrawService from '../services/draw/drawService';
 
 export default class CanvasArea extends HTMLElement {
   constructor() {
@@ -23,11 +23,9 @@ export default class CanvasArea extends HTMLElement {
   }
 
   initCanvas() {
-    this.canvas = this.querySelector('#drawingCanvas');
-    this.context = this.canvas.getContext('2d');
-    this.context.fillStyle = '#fff';
-    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    this._drawingService = new DrawingService(this.context);
+    const canvas = this.querySelector('#drawingCanvas');
+    const drawService = new DrawService(this.context, canvas);
+    drawService.createCanvas(this.width, this.height);
   }
 }
 customElements.define('canvas-area', CanvasArea);
