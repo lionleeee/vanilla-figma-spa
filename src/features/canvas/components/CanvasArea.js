@@ -10,7 +10,6 @@ export default class CanvasArea extends HTMLElement {
     this.height = 500;
     this.isDrawing = false;
     this.currentTool = null;
-    this.shapes = new Map(); // 도형들을 저장할 Map
 
     this._layerService = layerService;
   }
@@ -72,14 +71,15 @@ export default class CanvasArea extends HTMLElement {
       const { offsetX, offsetY } = e;
       const result = this._drawingService.finishDrawing(offsetX, offsetY);
       this.isDrawing = false;
-      console.log(result);
+
       this._layerService.addLayer(
         result.id,
         this.currentTool,
-        offsetX,
-        offsetY,
+        result.x,
+        result.y,
         result.width,
-        result.height
+        result.height,
+        result.radius
       );
     });
 

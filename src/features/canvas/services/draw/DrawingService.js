@@ -51,22 +51,27 @@ export default class DrawingService {
   }
 
   reDrawing(layer) {
-    console.log(layer);
     const startPoint = {
-      x: layer.width < 0 ? layer.x + layer.width : layer.x,
-      y: layer.height < 0 ? layer.y + layer.height : layer.y,
+      x: layer.x,
+      y: layer.y,
     };
 
     const endPoint = {
-      x: layer.width < 0 ? layer.x : layer.x + layer.width,
-      y: layer.height < 0 ? layer.y : layer.y + layer.height,
+      x: layer.x + layer.width,
+      y: layer.y + layer.height,
     };
+
+    if (layer.type === '원형' && layer.radius) {
+      endPoint.x = layer.x + layer.radius * 2;
+      endPoint.y = layer.y + layer.radius * 2;
+    }
+
     this.drawShape.draw(layer.type, startPoint, endPoint, layer.id);
   }
 
   redrawShapes(layers) {
     this.createCanvas(this.canvas.width, this.canvas.height);
-    layers.forEach((layer) => {
+    [...layers].reverse().forEach((layer) => {
       this.reDrawing(layer);
     });
   }

@@ -12,9 +12,8 @@ class LayerService {
     this.layers = [];
   }
 
-  addLayer(id, type, x, y, width, height) {
-    console.log(type, x, y);
-
+  addLayer(id, type, ...params) {
+    const [x, y, width, height, radius = 0] = params;
     const layer = {
       id: id,
       name: `${type} ${id}`,
@@ -24,6 +23,7 @@ class LayerService {
       z: ++this.currentZIndex,
       width,
       height,
+      radius,
     };
     this.layers.unshift(layer);
     this.notifyLayerUpdate();
@@ -68,7 +68,6 @@ class LayerService {
   updateZIndices() {
     this.layers.forEach((layer, index) => {
       layer.z = this.layers.length - index;
-      console.log(layer.z);
     });
   }
 
