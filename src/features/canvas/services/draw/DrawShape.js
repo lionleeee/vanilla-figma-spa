@@ -5,7 +5,7 @@ export default class DrawShape {
     this.context = context;
   }
 
-  draw(type, startPoint, endPoint) {
+  draw(type, startPoint, endPoint, id) {
     const width = endPoint.x - startPoint.x;
     const height = endPoint.y - startPoint.y;
 
@@ -18,7 +18,8 @@ export default class DrawShape {
           startPoint.x,
           startPoint.y,
           width,
-          height
+          height,
+          id
         );
         break;
       case '원형':
@@ -28,7 +29,8 @@ export default class DrawShape {
           this.context,
           startPoint.x,
           startPoint.y,
-          radius
+          radius,
+          id
         );
         break;
     }

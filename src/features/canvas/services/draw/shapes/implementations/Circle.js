@@ -1,8 +1,8 @@
 import Shape from '../base/Shape.js';
 
 export default class Circle extends Shape {
-  constructor(context, x, y, radius) {
-    super(context, x, y);
+  constructor(context, x, y, radius, id) {
+    super(context, x, y, id);
     this.radius = radius;
   }
 
@@ -23,6 +23,7 @@ export default class Circle extends Shape {
   getLayerInfo() {
     return {
       type: 'circle',
+      id: this.id,
       x: this.x,
       y: this.y,
       radius: this.radius,

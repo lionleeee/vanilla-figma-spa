@@ -9,6 +9,7 @@ export default class DrawingService {
     this.drawShape = new DrawShape(context);
     this.startPoint = null;
     this.currentType = null;
+    this.currentId = 0;
   }
 
   startDrawing(type, x, y) {
@@ -24,6 +25,10 @@ export default class DrawingService {
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
+  generateId() {
+    return ++this.currentId;
+  }
+
   previewShape(x, y) {
     if (!this.startPoint || !this.currentType) return;
     this.preview.previewShape(this.currentType, this.startPoint, { x, y });
@@ -32,10 +37,16 @@ export default class DrawingService {
   finishDrawing(x, y) {
     if (!this.startPoint || !this.currentType) return;
 
-    this.drawShape.draw(this.currentType, this.startPoint, { x, y });
+    const result = this.drawShape.draw(
+      this.currentType,
+      this.startPoint,
+      { x, y },
+      this.generateId()
+    );
     this.preview.clear();
 
     this.startPoint = null;
     this.currentType = null;
+    return result;
   }
 }

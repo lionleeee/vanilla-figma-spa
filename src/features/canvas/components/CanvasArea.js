@@ -51,8 +51,9 @@ export default class CanvasArea extends HTMLElement {
     canvas.addEventListener('mouseup', (e) => {
       if (!this.isDrawing) return;
       const { offsetX, offsetY } = e;
-      this._drawingService.finishDrawing(offsetX, offsetY);
+      const result = this._drawingService.finishDrawing(offsetX, offsetY);
       this.isDrawing = false;
+      console.log(result);
     });
 
     // 캔버스 밖으로 나갔을 때도 그리기 종료

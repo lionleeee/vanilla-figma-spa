@@ -1,10 +1,11 @@
 import Shape from '../base/Shape.js';
 
 export default class Rectangle extends Shape {
-  constructor(context, x, y, width, height) {
-    super(context, x, y);
+  constructor(context, x, y, width, height, id) {
+    super(context, x, y, id);
     this.width = width;
     this.height = height;
+    this.id = id;
   }
 
   draw() {
@@ -20,6 +21,7 @@ export default class Rectangle extends Shape {
   getLayerInfo() {
     return {
       type: 'rectangle',
+      id: this.id,
       x: this.x,
       y: this.y,
       width: this.width,
