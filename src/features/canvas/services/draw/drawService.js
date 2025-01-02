@@ -1,5 +1,5 @@
-import DrawPreviewService from './drawPreviewService';
-
+import Preview from './Preview';
+import DrawShape from './DrawShape';
 export default class DrawService {
   constructor(context, canvasElement) {
     this.context = context;
@@ -24,9 +24,8 @@ export default class DrawService {
     this.canvas.addEventListener('mouseleave', this.handleMouseLeave);
 
     // 프리뷰 서비스 초기화
-    this.previewService = new DrawPreviewService(this.canvas);
-
-    // 프리뷰 캔버스 스타일 설정
+    this.preview = new Preview(this.canvas);
+    this.drawShape = new DrawShape(this.context);
   }
 
   createCanvas(width, height) {
@@ -35,13 +34,6 @@ export default class DrawService {
     this.context = this.canvas.getContext('2d');
     this.context.fillStyle = '#fff';
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-    this.previewService.initialize(
-      width,
-      height,
-      this.canvas.offsetTop,
-      this.canvas.offsetLeft
-    );
   }
 
   handleMouseDown(event) {
@@ -54,25 +46,11 @@ export default class DrawService {
     if (!this.isDragging) return;
 
     const { x, y } = this.getMousePosition(event);
-
-    // 프리뷰 초기화
-    this.previewService.clear();
-
-    switch (this.currentTool) {
-      case '사각형':
-        this.previewService.drawRectanglePreview(
-          this.startX,
-          this.startY,
-          x,
-          y
-        );
-        break;
-    }
   }
   handleMouseUp(event) {
     if (!this.isDragging) return;
+    const { x, y } = this.getMousePosition(event);
 
-    this.previewService.clear();
     this.isDragging = false;
   }
 
