@@ -9,7 +9,7 @@ export default class Rectangle extends Shape {
   }
 
   draw() {
-    this.context.fillStyle = 'red';
+    this.context.fillStyle = this.getRandomColor();
     this.context.fillRect(this.x, this.y, this.width, this.height);
   }
 

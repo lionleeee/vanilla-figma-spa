@@ -1,3 +1,5 @@
+import { eventBus } from '@/core/EventBus.js';
+
 class LayerService {
   static instance = null;
 
@@ -55,11 +57,17 @@ class LayerService {
 
     this.updateZIndices();
     this.notifyLayerUpdate();
+
+    // 레이어 순서 변경 이벤트 추가
+    eventBus.emit('LAYERS_REORDERED', {
+      layers: this.layers,
+    });
   }
 
   updateZIndices() {
     this.layers.forEach((layer, index) => {
       layer.z = this.layers.length - index;
+      console.log(layer.z);
     });
   }
 

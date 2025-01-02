@@ -1,5 +1,6 @@
-import DrawingService from '../services/draw/DrawingService';
-import { layerService } from '../services/LayerService';
+import { eventBus } from '@/core/EventBus.js';
+import DrawingService from '../services/draw/DrawingService.js';
+import { layerService } from '../services/LayerService.js';
 
 export default class CanvasArea extends HTMLElement {
   constructor() {
@@ -9,19 +10,33 @@ export default class CanvasArea extends HTMLElement {
     this.height = 500;
     this.isDrawing = false;
     this.currentTool = null;
+    this.shapes = new Map(); // 도형들을 저장할 Map
 
-    this.canvas = null;
-    this._drawingService = null;
     this._layerService = layerService;
-
-    this.handleToolSelected = this.handleToolSelected.bind(this);
-    document.addEventListener('tool-selected', this.handleToolSelected);
   }
+
   async connectedCallback() {
     this.render();
     await Promise.resolve();
     this.initCanvas();
     this.initDrawingEvents();
+    this.initLayerEvents();
+    this.initToolEvents();
+  }
+
+  initLayerEvents() {
+    eventBus.on('LAYERS_REORDERED', ({ layers }) => {
+      this.redrawByZIndex(layers);
+    });
+  }
+  initToolEvents() {
+    eventBus.on('TOOL_SELECTED', ({ tool }) => {
+      this.currentTool = tool;
+    });
+  }
+
+  redrawByZIndex(layers) {
+    console.log(layers);
   }
 
   render() {
