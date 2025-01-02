@@ -1,5 +1,4 @@
 import DrawingService from '../services/draw/DrawingService';
-import DrawService from '../services/draw/drawService';
 
 export default class CanvasArea extends HTMLElement {
   constructor() {
