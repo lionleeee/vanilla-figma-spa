@@ -36,7 +36,7 @@ export default class CanvasArea extends HTMLElement {
   }
 
   redrawByZIndex(layers) {
-    console.log(layers);
+    this._drawingService.redrawShapes(layers);
   }
 
   render() {
@@ -77,7 +77,9 @@ export default class CanvasArea extends HTMLElement {
         result.id,
         this.currentTool,
         offsetX,
-        offsetY
+        offsetY,
+        result.width,
+        result.height
       );
     });
 

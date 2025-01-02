@@ -49,4 +49,25 @@ export default class DrawingService {
     this.currentType = null;
     return result;
   }
+
+  reDrawing(layer) {
+    console.log(layer);
+    const startPoint = {
+      x: layer.width < 0 ? layer.x + layer.width : layer.x,
+      y: layer.height < 0 ? layer.y + layer.height : layer.y,
+    };
+
+    const endPoint = {
+      x: layer.width < 0 ? layer.x : layer.x + layer.width,
+      y: layer.height < 0 ? layer.y : layer.y + layer.height,
+    };
+    this.drawShape.draw(layer.type, startPoint, endPoint, layer.id);
+  }
+
+  redrawShapes(layers) {
+    this.createCanvas(this.canvas.width, this.canvas.height);
+    layers.forEach((layer) => {
+      this.reDrawing(layer);
+    });
+  }
 }

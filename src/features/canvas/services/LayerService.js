@@ -12,7 +12,7 @@ class LayerService {
     this.layers = [];
   }
 
-  addLayer(id, type, x, y) {
+  addLayer(id, type, x, y, width, height) {
     console.log(type, x, y);
 
     const layer = {
@@ -22,6 +22,8 @@ class LayerService {
       x,
       y,
       z: ++this.currentZIndex,
+      width,
+      height,
     };
     this.layers.unshift(layer);
     this.notifyLayerUpdate();
@@ -58,7 +60,6 @@ class LayerService {
     this.updateZIndices();
     this.notifyLayerUpdate();
 
-    // 레이어 순서 변경 이벤트 추가
     eventBus.emit('LAYERS_REORDERED', {
       layers: this.layers,
     });

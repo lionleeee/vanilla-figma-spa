@@ -9,6 +9,7 @@ export default class DrawShape {
     const width = endPoint.x - startPoint.x;
     const height = endPoint.y - startPoint.y;
 
+    console.log(type, startPoint, endPoint, id);
     let shape;
     switch (type) {
       case '사각형':
