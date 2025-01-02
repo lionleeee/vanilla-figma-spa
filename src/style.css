@@ -49,7 +49,7 @@
   margin-bottom: 15px;
 }
 
-.main-canvas {
+.canvas-wrapper {
   flex: 1;
   padding: 20px;
   background: #e1e3e7;
@@ -170,7 +170,7 @@
     box-sizing: border-box;
   }
 
-  .main-canvas {
+  .canvas-wrapper {
     min-height: 400px;
   }
 

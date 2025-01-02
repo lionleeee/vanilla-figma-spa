@@ -37,10 +37,10 @@ export default class CanvasArea extends HTMLElement {
   redrawByZIndex(layers) {
     this._drawingService.redrawShapes(layers);
   }
-
+  CanvasWrapper;
   render() {
     this.innerHTML = `
-    <div class="main-canvas">
+    <div class="canvas-wrapper">
       <canvas id="drawingCanvas" width="${this.width}" height="${this.height}"></canvas>
     </div>
   `;
