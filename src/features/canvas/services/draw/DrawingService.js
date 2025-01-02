@@ -20,7 +20,7 @@ export default class DrawingService {
   createCanvas(width, height) {
     this.canvas.width = width;
     this.canvas.height = height;
-    this.context = this.canvas.getContext('2d');
+
     this.context.fillStyle = '#fff';
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }

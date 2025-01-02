@@ -1,4 +1,5 @@
 import DrawingService from '../services/draw/DrawingService';
+import { layerService } from '../services/LayerService';
 
 export default class CanvasArea extends HTMLElement {
   constructor() {
@@ -8,7 +9,10 @@ export default class CanvasArea extends HTMLElement {
     this.height = 500;
     this.isDrawing = false;
     this.currentTool = null;
+
+    this.canvas = null;
     this._drawingService = null;
+    this._layerService = layerService;
 
     this.handleToolSelected = this.handleToolSelected.bind(this);
     document.addEventListener('tool-selected', this.handleToolSelected);
@@ -28,35 +32,41 @@ export default class CanvasArea extends HTMLElement {
   `;
   }
 
-  handleToolSelected(event) {
-    const { tool } = event.detail;
-    this.currentTool = tool;
+  initCanvas() {
+    this.canvas = this.querySelector('#drawingCanvas');
+    this.context = this.canvas.getContext('2d');
+    this._drawingService = new DrawingService(this.context);
+    this._drawingService.createCanvas(this.width, this.height);
   }
 
   initDrawingEvents() {
-    const canvas = this.querySelector('#drawingCanvas');
-    canvas.addEventListener('mousedown', (e) => {
+    this.canvas.addEventListener('mousedown', (e) => {
       this.isDrawing = true;
       const { offsetX, offsetY } = e;
       this._drawingService.startDrawing(this.currentTool, offsetX, offsetY);
     });
 
-    canvas.addEventListener('mousemove', (e) => {
+    this.canvas.addEventListener('mousemove', (e) => {
       if (!this.isDrawing) return;
       const { offsetX, offsetY } = e;
       this._drawingService.previewShape(offsetX, offsetY);
     });
 
-    canvas.addEventListener('mouseup', (e) => {
+    this.canvas.addEventListener('mouseup', (e) => {
       if (!this.isDrawing) return;
       const { offsetX, offsetY } = e;
       const result = this._drawingService.finishDrawing(offsetX, offsetY);
       this.isDrawing = false;
       console.log(result);
+      this._layerService.addLayer(
+        result.id,
+        this.currentTool,
+        offsetX,
+        offsetY
+      );
     });
 
-    // 캔버스 밖으로 나갔을 때도 그리기 종료
-    canvas.addEventListener('mouseleave', () => {
+    this.canvas.addEventListener('mouseleave', () => {
       if (this.isDrawing) {
         this.isDrawing = false;
         this._drawingService.preview.clear();
@@ -64,12 +74,9 @@ export default class CanvasArea extends HTMLElement {
     });
   }
 
-  initCanvas() {
-    const canvas = this.querySelector('#drawingCanvas');
-    this.context = canvas.getContext('2d');
-    this._drawingService = new DrawingService(this.context);
-
-    this._drawingService.createCanvas(this.width, this.height);
+  handleToolSelected(event) {
+    const { tool } = event.detail;
+    this.currentTool = tool;
   }
 }
 customElements.define('canvas-area', CanvasArea);

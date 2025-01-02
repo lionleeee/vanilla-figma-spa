@@ -8,20 +8,14 @@ class LayerService {
     LayerService.instance = this;
     this.currentZIndex = 0;
     this.layers = [];
-    this.counters = {
-      rectangle: 0,
-      circle: 0,
-      line: 0,
-      text: 0,
-    };
   }
 
-  addLayer(type, x, y) {
+  addLayer(id, type, x, y) {
     console.log(type, x, y);
-    this.counters[type]++;
+
     const layer = {
-      id: Date.now(),
-      name: `${type} ${this.counters[type]}`,
+      id: id,
+      name: `${type} ${id}`,
       type,
       x,
       y,
