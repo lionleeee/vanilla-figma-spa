@@ -40,6 +40,8 @@
   background: white;
   border-right: 1px solid #e0e0e0;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 .section-title {
   font-size: 16px;
@@ -50,6 +52,7 @@
 .main-canvas {
   flex: 1;
   padding: 20px;
+  background: #e1e3e7;
 }
 
 .canvas-area {
@@ -170,4 +173,63 @@
   .main-canvas {
     min-height: 400px;
   }
+
+  .layer-sidebar {
+    height: auto;
+    width: 100%;
+    max-height: 300px;
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .layer-list {
+    max-height: 230px;
+  }
+}
+
+.layer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.layer-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.layer-coords {
+  color: #666;
+  font-size: 12px;
+}
+
+.layer-name {
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+
+.layer-name:hover {
+  background: #f0f0f0;
+}
+
+.layer-name-input {
+  width: 120px;
+  padding: 2px 4px;
+  border: 1px solid #e0e0e0;
+  border-radius: 2px;
+  font-size: 14px;
+  outline: none;
+}
+
+.layer-name-input:focus {
+  border-color: #000;
 }
