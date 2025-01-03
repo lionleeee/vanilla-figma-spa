@@ -1,11 +1,25 @@
+import { eventBus } from '@/core/EventBus.js';
+
 export default class ToolButton extends HTMLElement {
-  static get observedAttributes() {
-    return ['icon-path', 'label'];
+  constructor() {
+    super();
+
+    this.handleClick = this.handleClick.bind(this);
   }
 
   connectedCallback() {
     this.render();
-    this.addEventListeners();
+    this.addEventListener('click', this.handleClick);
+  }
+
+  disconnectedCallback() {
+    this.removeEventListener('click', this.handleClick);
+  }
+
+  handleClick() {
+    eventBus.emit('TOOL_SELECTED', {
+      tool: this.getAttribute('label'),
+    });
   }
 
   render() {
@@ -20,19 +34,6 @@ export default class ToolButton extends HTMLElement {
         ${label}
       </button>
     `;
-  }
-
-  addEventListeners() {
-    const button = this.querySelector('.tool-button');
-    button.addEventListener('click', () => {
-      const event = new CustomEvent('tool-selected', {
-        bubbles: true,
-        detail: {
-          tool: this.getAttribute('label'),
-        },
-      });
-      this.dispatchEvent(event);
-    });
   }
 }
 

@@ -1,3 +1,4 @@
+import DragAndDropService from '../services/dragAndDrop/DragAndDropService.js';
 import { layerService } from '../services/LayerService.js';
 
 export default class CanvasLayerSidebar extends HTMLElement {
@@ -9,6 +10,21 @@ export default class CanvasLayerSidebar extends HTMLElement {
   connectedCallback() {
     this.render();
     this.addEventListeners();
+    this.initDragAndDrop();
+  }
+
+  initDragAndDrop() {
+    this.dragAndDropManager = new DragAndDropService(this);
+
+    this.addEventListener('layer-dropped', this.handleDrop.bind(this));
+  }
+
+  handleDrop(e) {
+    const { target, data, isAbove } = e.detail;
+
+    if (target) {
+      layerService.changeLayerZIndex(data, target, isAbove);
+    }
   }
 
   addEventListeners() {
@@ -73,7 +89,7 @@ export default class CanvasLayerSidebar extends HTMLElement {
     layerList.innerHTML = this.layers
       .map(
         (layer) => `
-        <div class="layer-item" data-id="${layer.id}">
+        <div class="layer-item" draggable="true" data-id="${layer.id}">
           <span class="layer-name">${layer.name}</span>
           <span class="layer-coords">(${Math.round(layer.x)}, ${Math.round(layer.y)})</span>
         </div>

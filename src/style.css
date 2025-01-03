@@ -233,3 +233,29 @@
 .layer-name-input:focus {
   border-color: #000;
 }
+
+.layer-item {
+  position: relative;
+}
+
+.layer-item.drop-above::before,
+.layer-item.drop-below::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #222222;
+}
+
+.layer-item.drop-above::before {
+  top: 0;
+}
+
+.layer-item.drop-below::after {
+  bottom: 0;
+}
+
+.layer-item.dragging {
+  opacity: 0.5;
+}
