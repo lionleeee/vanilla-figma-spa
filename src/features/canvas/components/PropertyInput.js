@@ -5,6 +5,28 @@ export default class PropertyInput extends HTMLElement {
 
   connectedCallback() {
     this.render();
+    this.input = this.querySelector('input');
+    this.handleChange = this.handleChange.bind(this);
+    this.input.addEventListener('change', this.handleChange.bind(this));
+  }
+  handleChange(e) {
+    const label = this.getAttribute('label');
+    const value = e.target.value;
+
+    switch (label) {
+      case '가로':
+        eventBus.emit('WIDTH_CHANGED', { width: Number(value) });
+        break;
+      case '세로':
+        eventBus.emit('HEIGHT_CHANGED', { height: Number(value) });
+        break;
+      case '색상':
+        eventBus.emit('COLOR_CHANGED', { color: value });
+        break;
+      case '투명도':
+        eventBus.emit('OPACITY_CHANGED', { opacity: Number(value) / 100 });
+        break;
+    }
   }
 
   render() {
@@ -40,6 +62,7 @@ export default class PropertyInput extends HTMLElement {
         <input 
           type="${type}" 
           class="input-field" 
+          value="${value}"
           placeholder="${placeholder}"
         />
       `;
