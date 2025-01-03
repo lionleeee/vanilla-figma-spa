@@ -27,6 +27,14 @@ export default class PropertyInput extends HTMLElement {
           value="${value}"
         />
       `;
+    } else if (type === 'color') {
+      inputElement = `
+        <input 
+          type="color" 
+          class="color-picker" 
+          value="${value}"
+        />
+      `;
     } else {
       inputElement = `
         <input 

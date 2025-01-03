@@ -31,6 +31,11 @@ export default class CanvasToolsSidebar extends HTMLElement {
 
       <div class="property-group">
         <h2 class="section-title">설정</h2>
+          <property-input 
+           type="color" 
+          label="색상" 
+          value="#000">
+</property-input>
         <property-input
           type="number"
           label="가로"
