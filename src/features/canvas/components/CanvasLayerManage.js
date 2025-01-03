@@ -1,7 +1,7 @@
 import DragAndDropService from '../services/dragAndDrop/DragAndDropService.js';
 import { layerService } from '../services/LayerService.js';
 
-export default class CanvasLayerSidebar extends HTMLElement {
+export default class CanvasLayerManage extends HTMLElement {
   constructor() {
     super();
     this.layers = [];
@@ -99,4 +99,4 @@ export default class CanvasLayerSidebar extends HTMLElement {
   }
 }
 
-customElements.define('canvas-layer-sidebar', CanvasLayerSidebar);
+customElements.define('canvas-layer-manage', CanvasLayerManage);
