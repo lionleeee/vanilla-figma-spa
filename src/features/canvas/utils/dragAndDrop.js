@@ -40,9 +40,9 @@ export function initDragAndDrop(element) {
     }
 
     eventBus.emit('LAYER_DROPPED', {
-      droppedId: previousTarget.dataset.id,
-      targetId: draggedItem.dataset.id,
-      isAbove: !dropPosition,
+      droppedId: draggedItem.dataset.id,
+      targetId: previousTarget.dataset.id,
+      isAbove: dropPosition,
     });
     clearDragState();
   });
