@@ -11,7 +11,7 @@ export default class DrawShape {
     console.log(properties);
     let shape;
     switch (type) {
-      case '사각형':
+      case 'rectangle':
         shape = ShapeFactory.createShape(
           'rectangle',
           this.context,
@@ -23,7 +23,7 @@ export default class DrawShape {
           properties
         );
         break;
-      case '원형':
+      case 'circle':
         const radius = Math.sqrt(width * width + height * height) / 2;
         shape = ShapeFactory.createShape(
           'circle',

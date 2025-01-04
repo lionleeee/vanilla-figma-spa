@@ -42,7 +42,7 @@ export default class DrawingService {
     };
 
     return this.drawShape.draw(
-      '사각형',
+      this.currentType,
       this.startPoint,
       endPoint,
       this.generateId(),
@@ -104,7 +104,7 @@ export default class DrawingService {
     const deltaX = Math.abs(endX - startX);
     const deltaY = Math.abs(endY - startY);
 
-    if (deltaX < 1 && deltaY < 1) {
+    if (deltaX < 2 && deltaY < 2) {
       return this.quickDraw(endX, endY, property);
     } else {
       return this.finishDrawing(endX, endY, property);

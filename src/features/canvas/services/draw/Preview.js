@@ -31,7 +31,7 @@ export default class Preview {
 
     let shape;
     switch (type) {
-      case '사각형':
+      case 'rectangle':
         shape = ShapeFactory.createShape(
           'rectangle',
           this.previewContext,
@@ -41,7 +41,7 @@ export default class Preview {
           height
         );
         break;
-      case '원형':
+      case 'circle':
         const radius = Math.sqrt(width * width + height * height) / 2;
         shape = ShapeFactory.createShape(
           'circle',

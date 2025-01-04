@@ -17,8 +17,14 @@ export default class ToolButton extends HTMLElement {
   }
 
   handleClick() {
+    const toolNameMap = {
+      사각형: 'rectangle',
+      원형: 'circle',
+      선: 'line',
+    };
+    const koreanLabel = this.getAttribute('label');
     eventBus.emit('TOOL_SELECTED', {
-      tool: this.getAttribute('label'),
+      tool: toolNameMap[koreanLabel] || koreanLabel,
     });
   }
 
