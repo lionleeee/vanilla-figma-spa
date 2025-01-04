@@ -1,21 +1,21 @@
 import Rectangle from './implementations/Rectangle.js';
 import Circle from './implementations/Circle.js';
+import Line from './implementations/Line.js';
+import Text from './implementations/Text.js';
 
 export default class ShapeFactory {
-  static createShape(type, context, x, y, ...params) {
+  static createShape(type, ...args) {
     switch (type) {
-      case 'rectangle': {
-        const [width, height, id, properties] = params;
-        return new Rectangle(context, x, y, width, height, id, properties);
-      }
-
-      case 'circle': {
-        const [radius, id, properties] = params;
-        return new Circle(context, x, y, radius, id, properties);
-      }
-
+      case 'rectangle':
+        return new Rectangle(...args);
+      case 'circle':
+        return new Circle(...args);
+      case 'line':
+        return new Line(...args);
+      case 'text':
+        return new Text(...args);
       default:
-        throw new Error(`알수 없는 도구`);
+        throw new Error(`Unknown shape type: ${type}`);
     }
   }
 }

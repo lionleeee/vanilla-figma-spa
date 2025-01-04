@@ -5,11 +5,12 @@ export default class DrawShape {
     this.context = context;
   }
 
-  draw(type, startPoint, endPoint, id, properties = {}, radius = 0) {
+  draw(type, startPoint, endPoint, id, properties = {}) {
     const width = endPoint.x - startPoint.x;
     const height = endPoint.y - startPoint.y;
 
     let shape;
+    console.log(type);
     switch (type) {
       case 'rectangle':
         shape = ShapeFactory.createShape(
@@ -24,13 +25,35 @@ export default class DrawShape {
         );
         break;
       case 'circle':
-        radius = radius || Math.sqrt(width * width + height * height) / 2;
+        const radius = Math.sqrt(width * width + height * height) / 2;
         shape = ShapeFactory.createShape(
           'circle',
           this.context,
           startPoint.x,
           startPoint.y,
           radius,
+          id,
+          properties
+        );
+        break;
+      case 'line':
+        shape = ShapeFactory.createShape(
+          'line',
+          this.context,
+          startPoint.x,
+          startPoint.y,
+          endPoint.x,
+          endPoint.y,
+          id,
+          properties
+        );
+        break;
+      case 'text':
+        shape = ShapeFactory.createShape(
+          'text',
+          this.context,
+          startPoint.x,
+          startPoint.y,
           id,
           properties
         );
