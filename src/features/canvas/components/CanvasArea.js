@@ -118,7 +118,8 @@ export default class CanvasArea extends HTMLElement {
           result.y,
           result.width,
           result.height,
-          result.radius
+          result.radius,
+          result.properties
         );
       }
 

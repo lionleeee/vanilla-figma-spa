@@ -79,7 +79,9 @@ export default class DrawingService {
       y: layer.y + layer.height,
     };
 
-    if (layer.type === '원형' && layer.radius) {
+    if (layer.type === 'circle') {
+      startPoint.x = layer.x;
+      startPoint.y = layer.y;
       endPoint.x = layer.x + layer.radius * 2;
       endPoint.y = layer.y + layer.radius * 2;
     }
@@ -89,7 +91,8 @@ export default class DrawingService {
       startPoint,
       endPoint,
       layer.id,
-      layer.properties
+      layer.properties,
+      layer.radius
     );
   }
 

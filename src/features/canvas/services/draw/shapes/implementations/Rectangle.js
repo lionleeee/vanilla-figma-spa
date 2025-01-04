@@ -10,7 +10,6 @@ export default class Rectangle extends Shape {
 
   draw() {
     const { color, opacity = 1 } = this.properties;
-    console.log(color, opacity);
     this.context.fillStyle = color;
     this.context.globalAlpha = opacity;
     this.context.fillRect(this.x, this.y, this.width, this.height);
@@ -29,6 +28,7 @@ export default class Rectangle extends Shape {
       y: this.y,
       width: this.width,
       height: this.height,
+      properties: this.properties,
     };
   }
 }

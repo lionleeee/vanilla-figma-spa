@@ -13,7 +13,7 @@ class LayerService {
   }
 
   addLayer(id, type, ...params) {
-    const [x, y, width, height, radius = 0] = params;
+    const [x, y, width, height, radius = 0, properties] = params;
     const layer = {
       id: id,
       name: `${type} ${id}`,
@@ -24,8 +24,10 @@ class LayerService {
       width,
       height,
       radius,
+      properties,
     };
     this.layers.unshift(layer);
+    console.log(layer);
     this.notifyLayerUpdate();
     return layer;
   }
