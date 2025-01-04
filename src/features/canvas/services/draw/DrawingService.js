@@ -99,4 +99,15 @@ export default class DrawingService {
       this.reDrawing(layer);
     });
   }
+
+  handleDrawingComplete(endX, endY, startX, startY, property) {
+    const deltaX = Math.abs(endX - startX);
+    const deltaY = Math.abs(endY - startY);
+
+    if (deltaX < 1 && deltaY < 1) {
+      return this.quickDraw(endX, endY, property);
+    } else {
+      return this.finishDrawing(endX, endY, property);
+    }
+  }
 }

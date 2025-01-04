@@ -102,21 +102,15 @@ export default class CanvasArea extends HTMLElement {
       if (!this.isDrawing) return;
       const { offsetX, offsetY } = e;
 
-      // 마우스 이동 거리 계산
-      const deltaX = Math.abs(offsetX - this.startX);
-      const deltaY = Math.abs(offsetY - this.startY);
+      const result = this._drawingService.handleDrawingComplete(
+        offsetX,
+        offsetY,
+        this.startX,
+        this.startY,
+        this.currentProperty
+      );
 
-      if (deltaX < this.clickThreshold && deltaY < this.clickThreshold) {
-        // 클릭으로 간주
-        this._drawingService.quickDraw(offsetX, offsetY, this.currentProperty);
-      } else {
-        // 드래그로 간주
-        const result = this._drawingService.finishDrawing(
-          offsetX,
-          offsetY,
-          this.currentProperty
-        );
-
+      if (result) {
         this._layerService.addLayer(
           result.id,
           this.currentTool,
