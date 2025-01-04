@@ -1,3 +1,5 @@
+import { eventBus } from '../../../core/EventBus';
+
 export default class PropertyInput extends HTMLElement {
   static get observedAttributes() {
     return ['label', 'type', 'placeholder', 'min', 'max', 'value'];
@@ -5,9 +7,9 @@ export default class PropertyInput extends HTMLElement {
 
   connectedCallback() {
     this.render();
-    this.input = this.querySelector('input');
+
     this.handleChange = this.handleChange.bind(this);
-    this.input.addEventListener('change', this.handleChange.bind(this));
+    this.addEventListener('change', this.handleChange.bind(this));
   }
   handleChange(e) {
     const label = this.getAttribute('label');

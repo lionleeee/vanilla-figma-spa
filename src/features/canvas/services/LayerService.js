@@ -30,8 +30,8 @@ class LayerService {
     return layer;
   }
 
-  changeLayerZIndex(droppedId, targetElm, isAbove) {
-    const targetId = Number(targetElm.dataset.id);
+  changeLayerZIndex(droppedId, targetId, isAbove) {
+    targetId = Number(targetId);
     droppedId = Number(droppedId);
 
     const targetLayer = this.layers.find((layer) => layer.id === targetId);

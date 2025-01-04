@@ -1,6 +1,7 @@
 import { eventBus } from '@/core/EventBus.js';
 import DrawingService from '../services/draw/DrawingService.js';
 import { layerService } from '../services/LayerService.js';
+import { initDragAndDrop } from '../utils/dragAndDrop.js';
 
 export default class CanvasArea extends HTMLElement {
   constructor() {
@@ -10,17 +11,23 @@ export default class CanvasArea extends HTMLElement {
     this.height = 500;
     this.isDrawing = false;
     this.currentTool = null;
-
+    this.currentProperty = {
+      width: 100,
+      height: 100,
+      color: '#000',
+      opacity: 1,
+    };
     this._layerService = layerService;
   }
 
-  async connectedCallback() {
+  connectedCallback() {
     this.render();
-    await Promise.resolve();
     this.initCanvas();
     this.initDrawingEvents();
     this.initLayerEvents();
     this.initToolEvents();
+    this.initPropertyEvents();
+    initDragAndDrop(this);
   }
 
   initLayerEvents() {
@@ -31,6 +38,21 @@ export default class CanvasArea extends HTMLElement {
   initToolEvents() {
     eventBus.on('TOOL_SELECTED', ({ tool }) => {
       this.currentTool = tool;
+    });
+  }
+
+  initPropertyEvents() {
+    eventBus.on('WIDTH_CHANGED', ({ width }) => {
+      this.currentProperty.width = width;
+    });
+    eventBus.on('HEIGHT_CHANGED', ({ height }) => {
+      this.currentProperty.height = height;
+    });
+    eventBus.on('COLOR_CHANGED', ({ color }) => {
+      this.currentProperty.color = color;
+    });
+    eventBus.on('OPACITY_CHANGED', ({ opacity }) => {
+      this.currentProperty.opacity = opacity;
     });
   }
 
@@ -54,10 +76,20 @@ export default class CanvasArea extends HTMLElement {
   }
 
   initDrawingEvents() {
+    this.canvas.addEventListener('click', (e) => {
+      this.isDrawing = true;
+      const { offsetX, offsetY } = e;
+      this._drawingService.quickDraw(offsetX, offsetY, this.currentProperty);
+    });
     this.canvas.addEventListener('mousedown', (e) => {
       this.isDrawing = true;
       const { offsetX, offsetY } = e;
-      this._drawingService.startDrawing(this.currentTool, offsetX, offsetY);
+      this._drawingService.startDrawing(
+        this.currentTool,
+        offsetX,
+        offsetY,
+        this.currentProperty
+      );
     });
 
     this.canvas.addEventListener('mousemove', (e) => {

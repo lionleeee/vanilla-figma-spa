@@ -1,5 +1,7 @@
-import DragAndDropService from '../services/dragAndDrop/DragAndDropService.js';
+import { eventBus } from '../../../core/EventBus.js';
+
 import { layerService } from '../services/LayerService.js';
+import { initDragAndDrop } from '../utils/dragAndDrop.js';
 
 export default class CanvasLayerManage extends HTMLElement {
   constructor() {
@@ -10,13 +12,8 @@ export default class CanvasLayerManage extends HTMLElement {
   connectedCallback() {
     this.render();
     this.addEventListeners();
-    this.initDragAndDrop();
-  }
 
-  initDragAndDrop() {
-    this.dragAndDropManager = new DragAndDropService(this);
-
-    this.addEventListener('layer-dropped', this.handleDrop.bind(this));
+    initDragAndDrop(this);
   }
 
   handleDrop(e) {
@@ -31,6 +28,10 @@ export default class CanvasLayerManage extends HTMLElement {
     document.addEventListener('layers-updated', (e) => {
       this.layers = e.detail.layers;
       this.renderLayers();
+    });
+
+    eventBus.on('LAYER_DROPPED', ({ droppedId, targetId, isAbove }) => {
+      layerService.changeLayerZIndex(droppedId, targetId, isAbove);
     });
 
     this.addEventListener('click', (e) => {

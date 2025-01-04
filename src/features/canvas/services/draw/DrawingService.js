@@ -33,6 +33,11 @@ export default class DrawingService {
     if (!this.startPoint || !this.currentType) return;
     this.preview.previewShape(this.currentType, this.startPoint, { x, y });
   }
+  quickDraw(x, y, property) {
+    const { width, height, color, opacity } = property;
+    this.startPoint = { x, y };
+    this.preview.finishDrawing(property.width, property.height);
+  }
 
   finishDrawing(x, y) {
     if (!this.startPoint || !this.currentType) return;
