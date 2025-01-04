@@ -51,6 +51,18 @@ export default class Preview {
           radius
         );
         break;
+      case 'line':
+        shape = ShapeFactory.createShape(
+          'line',
+          this.previewContext,
+          startPoint.x,
+          startPoint.y,
+          currentPoint.x,
+          currentPoint.y,
+          null,
+          {}
+        );
+        break;
     }
 
     if (shape) {

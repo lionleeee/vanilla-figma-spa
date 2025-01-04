@@ -23,7 +23,8 @@ export default class Line extends Shape {
 
   preview() {
     this.context.beginPath();
-    this.context.strokeStyle = 'rgba(0, 0, 255, 0.5)';
+    this.context.strokeStyle = 'rgba(0, 0, 0, 1)';
+    this.context.lineWidth = 2;
     this.context.moveTo(this.x, this.y);
     this.context.lineTo(this.endX, this.endY);
     this.context.stroke();
