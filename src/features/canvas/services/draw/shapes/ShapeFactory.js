@@ -5,13 +5,13 @@ export default class ShapeFactory {
   static createShape(type, context, x, y, ...params) {
     switch (type) {
       case 'rectangle': {
-        const [width, height, id] = params;
-        return new Rectangle(context, x, y, width, height, id);
+        const [width, height, id, properties] = params;
+        return new Rectangle(context, x, y, width, height, id, properties);
       }
 
       case 'circle': {
-        const [radius, id] = params;
-        return new Circle(context, x, y, radius, id);
+        const [radius, id, properties] = params;
+        return new Circle(context, x, y, radius, id, properties);
       }
 
       default:

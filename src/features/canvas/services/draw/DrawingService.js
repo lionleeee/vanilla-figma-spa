@@ -36,17 +36,30 @@ export default class DrawingService {
   quickDraw(x, y, property) {
     const { width, height, color, opacity } = property;
     this.startPoint = { x, y };
-    this.preview.finishDrawing(property.width, property.height);
+    const endPoint = {
+      x: x + width,
+      y: y + height,
+    };
+
+    return this.drawShape.draw(
+      '사각형',
+      this.startPoint,
+      endPoint,
+      this.generateId(),
+      { color, opacity }
+    );
   }
 
-  finishDrawing(x, y) {
+  finishDrawing(x, y, property) {
     if (!this.startPoint || !this.currentType) return;
 
+    const { color, opacity } = property;
     const result = this.drawShape.draw(
       this.currentType,
       this.startPoint,
       { x, y },
-      this.generateId()
+      this.generateId(),
+      { color, opacity }
     );
     this.preview.clear();
 
@@ -71,7 +84,13 @@ export default class DrawingService {
       endPoint.y = layer.y + layer.radius * 2;
     }
 
-    this.drawShape.draw(layer.type, startPoint, endPoint, layer.id);
+    this.drawShape.draw(
+      layer.type,
+      startPoint,
+      endPoint,
+      layer.id,
+      layer.properties
+    );
   }
 
   redrawShapes(layers) {
