@@ -15,68 +15,78 @@ export default class PropertyInput extends HTMLElement {
     const label = this.getAttribute('label');
     const value = e.target.value;
 
-    switch (label) {
-      case '가로':
-        eventBus.emit('WIDTH_CHANGED', { width: Number(value) });
-        break;
-      case '세로':
-        eventBus.emit('HEIGHT_CHANGED', { height: Number(value) });
-        break;
-      case '색상':
-        eventBus.emit('COLOR_CHANGED', { color: value });
-        break;
-      case '투명도':
-        eventBus.emit('OPACITY_CHANGED', { opacity: Number(value) / 100 });
-        break;
-      case '텍스트':
-        eventBus.emit('TEXT_CHANGED', { text: value });
-        break;
+    const EVENT_MAP = {
+      가로: {
+        event: 'WIDTH_CHANGED',
+        transform: (value) => ({ width: Number(value) }),
+      },
+      세로: {
+        event: 'HEIGHT_CHANGED',
+        transform: (value) => ({ height: Number(value) }),
+      },
+      색상: {
+        event: 'COLOR_CHANGED',
+        transform: (value) => ({ color: value }),
+      },
+      투명도: {
+        event: 'OPACITY_CHANGED',
+        transform: (value) => ({ opacity: Number(value) / 100 }),
+      },
+      텍스트: {
+        event: 'TEXT_CHANGED',
+        transform: (value) => ({ text: value }),
+      },
+    };
+    const eventConfig = EVENT_MAP[label];
+    if (eventConfig) {
+      eventBus.emit(eventConfig.event, eventConfig.transform(value));
     }
   }
 
   render() {
-    const label = this.getAttribute('label') || '';
-    const type = this.getAttribute('type') || 'text';
-    const placeholder = this.getAttribute('placeholder') || '';
-    const min = this.getAttribute('min') || 0;
-    const max = this.getAttribute('max') || 100;
-    const value = this.getAttribute('value') || 100;
+    const attrs = {
+      label: this.getAttribute('label') || '',
+      type: this.getAttribute('type') || 'text',
+      placeholder: this.getAttribute('placeholder') || '',
+      min: this.getAttribute('min') || 0,
+      max: this.getAttribute('max') || 100,
+      value: this.getAttribute('value') || 100,
+    };
 
-    let inputElement = ``;
-
-    if (type === 'range') {
-      inputElement = `
+    const inputTemplates = {
+      range: () => `
         <input 
           type="range" 
           class="range-slider" 
-          min="${min}" 
-          max="${max}" 
-          value="${value}"
+          min="${attrs.min}" 
+          max="${attrs.max}" 
+          value="${attrs.value}"
         />
-      `;
-    } else if (type === 'color') {
-      inputElement = `
+      `,
+      color: () => `
         <input 
           type="color" 
           class="color-picker" 
-          value="${value}"
+          value="${attrs.value}"
         />
-      `;
-    } else {
-      inputElement = `
+      `,
+      default: () => `
         <input 
-          type="${type}" 
+          type="${attrs.type}" 
           class="input-field" 
-          value="${value}"
-          placeholder="${placeholder}"
+          value="${attrs.value}"
+          placeholder="${attrs.placeholder}"
         />
-      `;
-    }
+      `,
+    };
+
+    const getInputElement = () =>
+      (inputTemplates[attrs.type] || inputTemplates.default)();
 
     this.innerHTML = `
       <div class="property-input">
-        <label class="input-label">${label}</label>
-        ${inputElement}
+        <label class="input-label">${attrs.label}</label>
+        ${getInputElement()}
       </div>
     `;
   }
