@@ -2,13 +2,14 @@ import { eventBus } from '@/core/EventBus.js';
 import DrawingService from '../services/draw/DrawingService.js';
 import { layerService } from '../services/LayerService.js';
 import { initDragAndDrop } from '../utils/dragAndDrop.js';
+import './CanvasSettingModal.js';
 
 export default class CanvasArea extends HTMLElement {
   constructor() {
     super();
     this.context = null;
-    this.width = 500;
-    this.height = 500;
+    this.width = null;
+    this.height = null;
     this.isDrawing = false;
     this.currentTool = null;
     this.currentProperty = {
@@ -24,13 +25,27 @@ export default class CanvasArea extends HTMLElement {
   }
 
   connectedCallback() {
-    this.render();
-    this.initCanvas();
-    this.initDrawingEvents();
+    this.showCanvasSettingModal();
+    this.initCanvasEvents();
     this.initLayerEvents();
     this.initToolEvents();
     this.initPropertyEvents();
     initDragAndDrop(this);
+  }
+  showCanvasSettingModal() {
+    console.log('modal');
+    const modal = document.createElement('canvas-setting-modal');
+    document.body.appendChild(modal);
+  }
+  initCanvasEvents() {
+    eventBus.on('CANVAS_CREATED', ({ width, height }) => {
+      this.width = width;
+      this.height = height;
+      this.render();
+      this.initCanvas();
+      this.initDrawingEvents();
+      initDragAndDrop(this);
+    });
   }
 
   initLayerEvents() {
