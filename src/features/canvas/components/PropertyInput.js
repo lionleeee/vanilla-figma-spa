@@ -9,7 +9,7 @@ export default class PropertyInput extends HTMLElement {
     this.render();
 
     this.handleChange = this.handleChange.bind(this);
-    this.addEventListener('change', this.handleChange.bind(this));
+    this.addEventListener('change', this.handleChange);
   }
   handleChange(e) {
     const label = this.getAttribute('label');
