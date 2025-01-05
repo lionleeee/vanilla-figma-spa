@@ -31,10 +31,10 @@ export default class CanvasArea extends HTMLElement {
     this.initLayerEvents();
     this.initToolEvents();
     this.initPropertyEvents();
+    this.initResetEvent();
     initDragAndDrop(this);
   }
   showCanvasSettingModal() {
-    console.log('modal');
     const modal = document.createElement('canvas-setting-modal');
     document.body.appendChild(modal);
   }
@@ -74,6 +74,25 @@ export default class CanvasArea extends HTMLElement {
     });
   }
 
+  initResetEvent() {
+    eventBus.on('CANVAS_RESET', () => {
+      this.width = null;
+      this.height = null;
+      this._drawingService = null;
+      this.context = null;
+
+      this._layerService.clearLayers();
+
+      this.innerHTML = `
+        <div class="canvas-wrapper">
+          <canvas id="drawingCanvas"></canvas>
+        </div>
+      `;
+
+      this.showCanvasSettingModal();
+    });
+  }
+
   redrawByZIndex(layers) {
     this._drawingService.redrawShapes(layers);
   }
@@ -90,7 +109,7 @@ export default class CanvasArea extends HTMLElement {
     this.canvas = this.querySelector('#drawingCanvas');
     this.context = this.canvas.getContext('2d');
     this._drawingService = new DrawingService(this.context);
-    console.log(this.width, this.height);
+
     this._drawingService.createCanvas(this.width, this.height);
   }
 

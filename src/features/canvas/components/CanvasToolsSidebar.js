@@ -1,9 +1,18 @@
 import './ToolButton.js';
 import './PropertyInput.js';
+import { eventBus } from '@/core/EventBus.js';
 
 export default class CanvasToolsSidebar extends HTMLElement {
   connectedCallback() {
     this.render();
+    this.addEventListeners();
+  }
+
+  addEventListeners() {
+    const resetButton = this.querySelector('.reset-button');
+    resetButton.addEventListener('click', () => {
+      eventBus.emit('CANVAS_RESET');
+    });
   }
 
   render() {

@@ -8,7 +8,6 @@ export default class CanvasSettingModal extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log(this.width, this.height);
     this.render();
     this.addEventListeners();
   }
