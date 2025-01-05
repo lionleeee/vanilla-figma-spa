@@ -10,7 +10,7 @@ export default class DrawShape {
     const height = endPoint.y - startPoint.y;
 
     let shape;
-    console.log(type);
+
     switch (type) {
       case 'rectangle':
         shape = ShapeFactory.createShape(

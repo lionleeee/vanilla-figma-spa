@@ -31,7 +31,6 @@ export default class CanvasLayerManage extends HTMLElement {
     });
 
     eventBus.on('LAYER_DROPPED', ({ droppedId, targetId, isAbove }) => {
-      console.log(droppedId, targetId, isAbove);
       layerService.changeLayerZIndex(droppedId, targetId, isAbove);
     });
 

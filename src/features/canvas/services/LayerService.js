@@ -27,7 +27,7 @@ class LayerService {
       properties,
     };
     this.layers.unshift(layer);
-    console.log(layer);
+
     this.notifyLayerUpdate();
     return layer;
   }

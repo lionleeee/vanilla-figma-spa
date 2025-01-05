@@ -116,8 +116,8 @@ export default class CanvasArea extends HTMLElement {
           this.currentTool,
           result.x,
           result.y,
-          result.width,
-          result.height,
+          result.width || result.endX,
+          result.height || result.endY,
           result.radius,
           result.properties
         );
