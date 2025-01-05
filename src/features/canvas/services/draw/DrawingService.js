@@ -35,7 +35,7 @@ export default class DrawingService {
     this.preview.previewShape(this.currentType, this.startPoint, { x, y });
   }
   quickDraw(x, y, property) {
-    const { width, height, color, opacity } = property;
+    const { width, height, color, opacity, text } = property;
     this.startPoint = { x, y };
     const endPoint = {
       x: x + width,
@@ -47,7 +47,7 @@ export default class DrawingService {
       this.startPoint,
       endPoint,
       this.generateId(),
-      { color, opacity }
+      { color, opacity, text }
     );
   }
 

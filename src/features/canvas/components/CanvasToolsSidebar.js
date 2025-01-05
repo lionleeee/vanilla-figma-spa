@@ -47,6 +47,13 @@ export default class CanvasToolsSidebar extends HTMLElement {
             placeholder="#000">
           </property-input>
         <property-input
+          type="text"
+          label="텍스트"
+          value="Text"
+          placeholder="텍스트 입력"
+          id="text-input">
+        </property-input>
+        <property-input
           type="number"
           label="가로"
           value="100"

@@ -17,6 +17,7 @@ export default class CanvasArea extends HTMLElement {
       height: 100,
       color: '#000',
       opacity: 1,
+      text: 'Text',
     };
     this._layerService = layerService;
     this.startX = null;
@@ -71,6 +72,9 @@ export default class CanvasArea extends HTMLElement {
     });
     eventBus.on('OPACITY_CHANGED', ({ opacity }) => {
       this.currentProperty.opacity = opacity;
+    });
+    eventBus.on('TEXT_CHANGED', ({ text }) => {
+      this.currentProperty.text = text;
     });
   }
 

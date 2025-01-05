@@ -28,6 +28,9 @@ export default class PropertyInput extends HTMLElement {
       case '투명도':
         eventBus.emit('OPACITY_CHANGED', { opacity: Number(value) / 100 });
         break;
+      case '텍스트':
+        eventBus.emit('TEXT_CHANGED', { text: value });
+        break;
     }
   }
 
