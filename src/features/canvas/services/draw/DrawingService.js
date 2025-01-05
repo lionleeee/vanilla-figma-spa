@@ -5,7 +5,7 @@ export default class DrawingService {
   constructor(context) {
     this.context = context;
     this.canvas = context.canvas;
-    this.preview = new Preview(context);
+    this.preview = null;
     this.drawShape = new DrawShape(context);
     this.startPoint = null;
     this.currentType = null;
@@ -23,6 +23,7 @@ export default class DrawingService {
 
     this.context.fillStyle = '#fff';
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.preview = new Preview(this.context);
   }
 
   generateId() {

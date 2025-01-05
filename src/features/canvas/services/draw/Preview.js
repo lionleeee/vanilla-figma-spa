@@ -12,9 +12,16 @@ export default class Preview {
     canvas.width = this.context.canvas.width;
     canvas.height = this.context.canvas.height;
     canvas.style.position = 'absolute';
-    canvas.style.top = this.context.canvas.offsetTop + 'px';
-    canvas.style.left = this.context.canvas.offsetLeft + 'px';
     canvas.style.pointerEvents = 'none';
+
+    const updatePosition = () => {
+      const rect = this.context.canvas.getBoundingClientRect();
+      canvas.style.top = `${rect.top}px`;
+      canvas.style.left = `${rect.left}px`;
+    };
+
+    updatePosition();
+
     this.context.canvas.parentNode.appendChild(canvas);
     return canvas;
   }
