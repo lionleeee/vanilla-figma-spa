@@ -25,6 +25,7 @@ export default class CanvasArea extends HTMLElement {
   }
 
   connectedCallback() {
+    this.render();
     this.showCanvasSettingModal();
     this.initCanvasEvents();
     this.initLayerEvents();
@@ -41,7 +42,6 @@ export default class CanvasArea extends HTMLElement {
     eventBus.on('CANVAS_CREATED', ({ width, height }) => {
       this.width = width;
       this.height = height;
-      this.render();
       this.initCanvas();
       this.initDrawingEvents();
       initDragAndDrop(this);
@@ -81,7 +81,7 @@ export default class CanvasArea extends HTMLElement {
   render() {
     this.innerHTML = `
     <div class="canvas-wrapper">
-      <canvas id="drawingCanvas" width="${this.width}" height="${this.height}"></canvas>
+      <canvas id="drawingCanvas" ></canvas>
     </div>
   `;
   }
@@ -90,6 +90,7 @@ export default class CanvasArea extends HTMLElement {
     this.canvas = this.querySelector('#drawingCanvas');
     this.context = this.canvas.getContext('2d');
     this._drawingService = new DrawingService(this.context);
+    console.log(this.width, this.height);
     this._drawingService.createCanvas(this.width, this.height);
   }
 

@@ -20,13 +20,13 @@ export default class CanvasSettingModal extends HTMLElement {
           <h2>캔버스 크기 설정</h2>
           <div class="input-group">
             <label>
-              Width:
+              가로:
               <input type="number" id="canvas-width" value="${this.width}" min="100" max="2000">
             </label>
           </div>
           <div class="modal-input-group">
             <label>
-              Height:
+              세로:
               <input type="number" id="canvas-height" value="${this.height}" min="100" max="2000">
             </label>
           </div>

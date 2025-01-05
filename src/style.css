@@ -1,6 +1,16 @@
 @import url('./reset.css');
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
 .header {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -31,17 +41,27 @@
 
 .container {
   display: flex;
+  flex-direction: row;
+  width: 100%;
   min-height: calc(100vh - 57px);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
-
+canvas-layer-manage {
+  width: 20%;
+}
+canvas-area {
+  width: 60%;
+}
+canvas-tools-sidebar {
+  width: 20%;
+}
 .layer-sidebar {
   height: 100vh;
-  width: 200px;
   background: white;
   border-right: 1px solid #e0e0e0;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
 }
 .section-title {
   font-size: 16px;
@@ -51,22 +71,21 @@
 
 .canvas-wrapper {
   flex: 1;
+  height: 100%;
   padding: 20px;
   background: #e1e3e7;
+  display: block;
+  overflow: auto;
 }
 
-.canvas-area {
-  width: 100%;
-  height: 100%;
+#drawingCanvas {
+  display: block;
   background: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  min-height: 500px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .tools-sidebar {
   height: 100vh;
-  width: 250px;
   background: white;
   border-left: 1px solid #e0e0e0;
   padding: 20px;
@@ -158,6 +177,16 @@
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
+  }
+
+  canvas-layer-manage {
+    width: 100%;
+  }
+  canvas-area {
+    width: 100%;
+  }
+  canvas-tools-sidebar {
+    width: 100%;
   }
 
   .layer-sidebar,
