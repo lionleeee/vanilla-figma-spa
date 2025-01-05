@@ -5,6 +5,7 @@ export default class ToolButton extends HTMLElement {
     super();
 
     this.handleClick = this.handleClick.bind(this);
+    this.isSelected = false;
   }
 
   connectedCallback() {
@@ -24,9 +25,21 @@ export default class ToolButton extends HTMLElement {
       텍스트: 'text',
     };
     const koreanLabel = this.getAttribute('label');
-    eventBus.emit('TOOL_SELECTED', {
-      tool: toolNameMap[koreanLabel] || koreanLabel,
-    });
+    const toolName = toolNameMap[koreanLabel] || koreanLabel;
+
+    if (this.isSelected) {
+      this.isSelected = false;
+      this.querySelector('.tool-button').classList.remove('selected');
+      eventBus.emit('TOOL_SELECTED', { tool: null });
+    } else {
+      document.querySelectorAll('tool-button').forEach((button) => {
+        button.isSelected = false;
+        button.querySelector('.tool-button').classList.remove('selected');
+      });
+      this.querySelector('.tool-button').classList.add('selected');
+      this.isSelected = true;
+      eventBus.emit('TOOL_SELECTED', { tool: toolName });
+    }
   }
 
   render() {
