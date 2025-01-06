@@ -1,7 +1,9 @@
-import DragAndDropService from '../services/dragAndDrop/DragAndDropService.js';
-import { layerService } from '../services/LayerService.js';
+import { eventBus } from '../../../core/EventBus.js';
 
-export default class CanvasLayerSidebar extends HTMLElement {
+import { layerService } from '../services/LayerService.js';
+import { initDragAndDrop } from '../utils/dragAndDrop.js';
+
+export default class CanvasLayerManage extends HTMLElement {
   constructor() {
     super();
     this.layers = [];
@@ -10,13 +12,8 @@ export default class CanvasLayerSidebar extends HTMLElement {
   connectedCallback() {
     this.render();
     this.addEventListeners();
-    this.initDragAndDrop();
-  }
 
-  initDragAndDrop() {
-    this.dragAndDropManager = new DragAndDropService(this);
-
-    this.addEventListener('layer-dropped', this.handleDrop.bind(this));
+    initDragAndDrop(this);
   }
 
   handleDrop(e) {
@@ -31,6 +28,10 @@ export default class CanvasLayerSidebar extends HTMLElement {
     document.addEventListener('layers-updated', (e) => {
       this.layers = e.detail.layers;
       this.renderLayers();
+    });
+
+    eventBus.on('LAYER_DROPPED', ({ droppedId, targetId, isAbove }) => {
+      layerService.changeLayerZIndex(droppedId, targetId, isAbove);
     });
 
     this.addEventListener('click', (e) => {
@@ -99,4 +100,4 @@ export default class CanvasLayerSidebar extends HTMLElement {
   }
 }
 
-customElements.define('canvas-layer-sidebar', CanvasLayerSidebar);
+customElements.define('canvas-layer-manage', CanvasLayerManage);

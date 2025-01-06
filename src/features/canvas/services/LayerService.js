@@ -13,7 +13,7 @@ class LayerService {
   }
 
   addLayer(id, type, ...params) {
-    const [x, y, width, height, radius = 0] = params;
+    const [x, y, width, height, radius = 0, properties] = params;
     const layer = {
       id: id,
       name: `${type} ${id}`,
@@ -24,14 +24,16 @@ class LayerService {
       width,
       height,
       radius,
+      properties,
     };
     this.layers.unshift(layer);
+
     this.notifyLayerUpdate();
     return layer;
   }
 
-  changeLayerZIndex(droppedId, targetElm, isAbove) {
-    const targetId = Number(targetElm.dataset.id);
+  changeLayerZIndex(droppedId, targetId, isAbove) {
+    targetId = Number(targetId);
     droppedId = Number(droppedId);
 
     const targetLayer = this.layers.find((layer) => layer.id === targetId);

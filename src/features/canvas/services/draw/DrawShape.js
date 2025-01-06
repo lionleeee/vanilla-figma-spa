@@ -5,13 +5,14 @@ export default class DrawShape {
     this.context = context;
   }
 
-  draw(type, startPoint, endPoint, id) {
+  draw(type, startPoint, endPoint, id, properties = {}) {
     const width = endPoint.x - startPoint.x;
     const height = endPoint.y - startPoint.y;
 
     let shape;
+
     switch (type) {
-      case '사각형':
+      case 'rectangle':
         shape = ShapeFactory.createShape(
           'rectangle',
           this.context,
@@ -19,10 +20,11 @@ export default class DrawShape {
           startPoint.y,
           width,
           height,
-          id
+          id,
+          properties
         );
         break;
-      case '원형':
+      case 'circle':
         const radius = Math.sqrt(width * width + height * height) / 2;
         shape = ShapeFactory.createShape(
           'circle',
@@ -30,7 +32,30 @@ export default class DrawShape {
           startPoint.x,
           startPoint.y,
           radius,
-          id
+          id,
+          properties
+        );
+        break;
+      case 'line':
+        shape = ShapeFactory.createShape(
+          'line',
+          this.context,
+          startPoint.x,
+          startPoint.y,
+          endPoint.x,
+          endPoint.y,
+          id,
+          properties
+        );
+        break;
+      case 'text':
+        shape = ShapeFactory.createShape(
+          'text',
+          this.context,
+          startPoint.x,
+          startPoint.y,
+          id,
+          properties
         );
         break;
     }

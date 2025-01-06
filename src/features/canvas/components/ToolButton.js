@@ -17,8 +17,9 @@ export default class ToolButton extends HTMLElement {
   }
 
   handleClick() {
+    const toolName = this.getAttribute('tool-name');
     eventBus.emit('TOOL_SELECTED', {
-      tool: this.getAttribute('label'),
+      tool: toolName,
     });
   }
 

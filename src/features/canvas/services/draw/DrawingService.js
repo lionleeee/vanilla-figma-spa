@@ -33,15 +33,33 @@ export default class DrawingService {
     if (!this.startPoint || !this.currentType) return;
     this.preview.previewShape(this.currentType, this.startPoint, { x, y });
   }
+  quickDraw(x, y, property) {
+    const { width, height, color, opacity } = property;
+    this.startPoint = { x, y };
+    const endPoint = {
+      x: x + width,
+      y: y + height,
+    };
 
-  finishDrawing(x, y) {
+    return this.drawShape.draw(
+      this.currentType,
+      this.startPoint,
+      endPoint,
+      this.generateId(),
+      { color, opacity }
+    );
+  }
+
+  finishDrawing(x, y, property) {
     if (!this.startPoint || !this.currentType) return;
 
+    const { color, opacity } = property;
     const result = this.drawShape.draw(
       this.currentType,
       this.startPoint,
       { x, y },
-      this.generateId()
+      this.generateId(),
+      { color, opacity }
     );
     this.preview.clear();
 
@@ -61,12 +79,25 @@ export default class DrawingService {
       y: layer.y + layer.height,
     };
 
-    if (layer.type === '원형' && layer.radius) {
+    if (layer.type === 'circle') {
+      startPoint.x = layer.x;
+      startPoint.y = layer.y;
       endPoint.x = layer.x + layer.radius * 2;
       endPoint.y = layer.y + layer.radius * 2;
     }
+    if (layer.type === 'line') {
+      endPoint.x = layer.endX;
+      endPoint.y = layer.endY;
+    }
 
-    this.drawShape.draw(layer.type, startPoint, endPoint, layer.id);
+    this.drawShape.draw(
+      layer.type,
+      startPoint,
+      endPoint,
+      layer.id,
+      layer.properties,
+      layer.radius
+    );
   }
 
   redrawShapes(layers) {
@@ -74,5 +105,16 @@ export default class DrawingService {
     [...layers].reverse().forEach((layer) => {
       this.reDrawing(layer);
     });
+  }
+
+  handleDrawingComplete(endX, endY, startX, startY, property) {
+    const deltaX = Math.abs(endX - startX);
+    const deltaY = Math.abs(endY - startY);
+
+    if (deltaX < 2 && deltaY < 2) {
+      return this.quickDraw(endX, endY, property);
+    } else {
+      return this.finishDrawing(endX, endY, property);
+    }
   }
 }

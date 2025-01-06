@@ -1,10 +1,44 @@
+import { eventBus } from '../../../core/EventBus';
+
 export default class PropertyInput extends HTMLElement {
   static get observedAttributes() {
-    return ['label', 'type', 'placeholder', 'min', 'max', 'value'];
+    return [
+      'label',
+      'type',
+      'placeholder',
+      'min',
+      'max',
+      'value',
+      'data-property-type',
+    ];
   }
 
   connectedCallback() {
     this.render();
+
+    this.handleChange = this.handleChange.bind(this);
+    this.addEventListener('change', this.handleChange);
+  }
+  handleChange(e) {
+    const propertyType = this.getAttribute('data-property-type');
+    const value = e.target.value;
+    const propertyValue = this.#getPropertyTypeValue(propertyType, value);
+
+    eventBus.emit(`${propertyType.toUpperCase()}_CHANGED`, {
+      [propertyType]: propertyValue,
+    });
+  }
+
+  #getPropertyTypeValue(propertyType, value) {
+    if (propertyType === 'color') {
+      return value;
+    }
+
+    if (propertyType === 'opacity') {
+      return Number(value) / 100;
+    }
+
+    return Number(value);
   }
 
   render() {
@@ -27,11 +61,20 @@ export default class PropertyInput extends HTMLElement {
           value="${value}"
         />
       `;
+    } else if (type === 'color') {
+      inputElement = `
+        <input 
+          type="color" 
+          class="color-picker" 
+          value="${value}"
+        />
+      `;
     } else {
       inputElement = `
         <input 
           type="${type}" 
           class="input-field" 
+          value="${value}"
           placeholder="${placeholder}"
         />
       `;

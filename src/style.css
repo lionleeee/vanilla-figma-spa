@@ -49,7 +49,7 @@
   margin-bottom: 15px;
 }
 
-.main-canvas {
+.canvas-wrapper {
   flex: 1;
   padding: 20px;
   background: #e1e3e7;
@@ -170,7 +170,7 @@
     box-sizing: border-box;
   }
 
-  .main-canvas {
+  .canvas-wrapper {
     min-height: 400px;
   }
 
@@ -258,4 +258,19 @@
 
 .layer-item.dragging {
   opacity: 0.5;
+}
+
+.color-picker {
+  width: 100%;
+  padding: 0;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+  cursor: pointer;
+  height: 33px;
+}
+
+.color-picker::-webkit-color-swatch-wrapper {
+  padding: 0;
 }
