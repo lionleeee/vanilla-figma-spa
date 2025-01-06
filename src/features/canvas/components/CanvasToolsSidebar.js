@@ -33,13 +33,15 @@ export default class CanvasToolsSidebar extends HTMLElement {
         <h2 class="section-title">설정</h2>
           <property-input 
             type="color" 
-            label="색상" 
+            label="색상"
+            data-property-type="color"
             value="#000"
             placeholder="#000">
           </property-input>
         <property-input
           type="number"
           label="가로"
+          data-property-type="width"
           value="100"
           placeholder="Width">
         </property-input>
@@ -47,6 +49,7 @@ export default class CanvasToolsSidebar extends HTMLElement {
         <property-input
           type="number"
           label="세로"
+          data-property-type="height"
           value="100"
           placeholder="Height">
         </property-input>
@@ -54,6 +57,7 @@ export default class CanvasToolsSidebar extends HTMLElement {
         <property-input
           type="range"
           label="투명도"
+          data-property-type="opacity"
           min="0"
           max="100"
           value="100">

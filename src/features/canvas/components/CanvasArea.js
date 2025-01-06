@@ -46,7 +46,7 @@ export default class CanvasArea extends HTMLElement {
 
   initPropertyEvents() {
     eventBus.on('WIDTH_CHANGED', ({ width }) => {
-      this.currentProperty.width = width;
+      this.currentProperty.width = Number(width);
     });
     eventBus.on('HEIGHT_CHANGED', ({ height }) => {
       this.currentProperty.height = height;
@@ -55,7 +55,7 @@ export default class CanvasArea extends HTMLElement {
       this.currentProperty.color = color;
     });
     eventBus.on('OPACITY_CHANGED', ({ opacity }) => {
-      this.currentProperty.opacity = opacity;
+      this.currentProperty.opacity = Number(opacity);
     });
   }
 

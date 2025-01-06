@@ -2,33 +2,43 @@ import { eventBus } from '../../../core/EventBus';
 
 export default class PropertyInput extends HTMLElement {
   static get observedAttributes() {
-    return ['label', 'type', 'placeholder', 'min', 'max', 'value'];
+    return [
+      'label',
+      'type',
+      'placeholder',
+      'min',
+      'max',
+      'value',
+      'data-property-type',
+    ];
   }
 
   connectedCallback() {
     this.render();
 
     this.handleChange = this.handleChange.bind(this);
-    this.addEventListener('change', this.handleChange.bind(this));
+    this.addEventListener('change', this.handleChange);
   }
   handleChange(e) {
-    const label = this.getAttribute('label');
+    const propertyType = this.getAttribute('data-property-type');
     const value = e.target.value;
+    const propertyValue = this.#getPropertyTypeValue(propertyType, value);
 
-    switch (label) {
-      case '가로':
-        eventBus.emit('WIDTH_CHANGED', { width: Number(value) });
-        break;
-      case '세로':
-        eventBus.emit('HEIGHT_CHANGED', { height: Number(value) });
-        break;
-      case '색상':
-        eventBus.emit('COLOR_CHANGED', { color: value });
-        break;
-      case '투명도':
-        eventBus.emit('OPACITY_CHANGED', { opacity: Number(value) / 100 });
-        break;
+    eventBus.emit(`${propertyType.toUpperCase()}_CHANGED`, {
+      [propertyType]: propertyValue,
+    });
+  }
+
+  #getPropertyTypeValue(propertyType, value) {
+    if (propertyType === 'color') {
+      return value;
     }
+
+    if (propertyType === 'opacity') {
+      return Number(value) / 100;
+    }
+
+    return Number(value);
   }
 
   render() {
