@@ -18,28 +18,36 @@ export default class ToolButton extends HTMLElement {
   }
 
   handleClick() {
-    const toolNameMap = {
-      사각형: 'rectangle',
-      원형: 'circle',
-      직선: 'line',
-      텍스트: 'text',
-    };
-    const koreanLabel = this.getAttribute('label');
-    const toolName = toolNameMap[koreanLabel] || koreanLabel;
-
+    const toolName = this.getAttribute('tool-name');
+    const buttonElement = this.querySelector('.tool-button');
+    console.log('toolName', toolName);
     if (this.isSelected) {
-      this.isSelected = false;
-      this.querySelector('.tool-button').classList.remove('selected');
-      eventBus.emit('TOOL_SELECTED', { tool: null });
-    } else {
-      document.querySelectorAll('tool-button').forEach((button) => {
-        button.isSelected = false;
-        button.querySelector('.tool-button').classList.remove('selected');
-      });
-      this.querySelector('.tool-button').classList.add('selected');
-      this.isSelected = true;
-      eventBus.emit('TOOL_SELECTED', { tool: toolName });
+      this.deselectTool(buttonElement);
+      return;
     }
+
+    this.deselectAllTools();
+    this.selectTool(buttonElement, toolName);
+  }
+
+  deselectTool(buttonElement) {
+    this.isSelected = false;
+    buttonElement.classList.remove('selected');
+    eventBus.emit('TOOL_SELECTED', { tool: null });
+  }
+
+  selectTool(buttonElement, toolName) {
+    this.isSelected = true;
+    buttonElement.classList.add('selected');
+    console.log('toolName', toolName);
+    eventBus.emit('TOOL_SELECTED', { tool: toolName });
+  }
+
+  deselectAllTools() {
+    document.querySelectorAll('tool-button').forEach((button) => {
+      button.isSelected = false;
+      button.querySelector('.tool-button')?.classList.remove('selected');
+    });
   }
 
   render() {

@@ -2,7 +2,15 @@ import { eventBus } from '../../../core/EventBus';
 
 export default class PropertyInput extends HTMLElement {
   static get observedAttributes() {
-    return ['label', 'type', 'placeholder', 'min', 'max', 'value'];
+    return [
+      'label',
+      'type',
+      'placeholder',
+      'min',
+      'max',
+      'value',
+      'data-property-type',
+    ];
   }
 
   connectedCallback() {
@@ -12,35 +20,27 @@ export default class PropertyInput extends HTMLElement {
     this.addEventListener('change', this.handleChange);
   }
   handleChange(e) {
-    const label = this.getAttribute('label');
+    const propertyType = this.getAttribute('data-property-type');
     const value = e.target.value;
+    const propertyValue = this.#getPropertyTypeValue(propertyType, value);
+    eventBus.emit(`${propertyType.toUpperCase()}_CHANGED`, {
+      [propertyType]: propertyValue,
+    });
+  }
 
-    const EVENT_MAP = {
-      가로: {
-        event: 'WIDTH_CHANGED',
-        transform: (value) => ({ width: Number(value) }),
-      },
-      세로: {
-        event: 'HEIGHT_CHANGED',
-        transform: (value) => ({ height: Number(value) }),
-      },
-      색상: {
-        event: 'COLOR_CHANGED',
-        transform: (value) => ({ color: value }),
-      },
-      투명도: {
-        event: 'OPACITY_CHANGED',
-        transform: (value) => ({ opacity: Number(value) / 100 }),
-      },
-      텍스트: {
-        event: 'TEXT_CHANGED',
-        transform: (value) => ({ text: value }),
-      },
-    };
-    const eventConfig = EVENT_MAP[label];
-    if (eventConfig) {
-      eventBus.emit(eventConfig.event, eventConfig.transform(value));
+  #getPropertyTypeValue(propertyType, value) {
+    if (propertyType === 'color') {
+      return value;
     }
+
+    if (propertyType === 'opacity') {
+      return Number(value) / 100;
+    }
+    if (propertyType === 'text') {
+      return value;
+    }
+
+    return Number(value);
   }
 
   render() {
