@@ -328,13 +328,21 @@ canvas-tools-sidebar {
 }
 
 .modal-input-group {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
   margin: 10px 0;
 }
-
+.modal-input-group label {
+  width: 100%;
+}
 .modal-content input {
-  width: 100px;
+  width: 80%;
   padding: 5px;
   margin-left: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 2px;
+  font-size: 14px;
 }
 
 .modal-content button {

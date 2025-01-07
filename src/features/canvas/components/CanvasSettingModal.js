@@ -17,7 +17,7 @@ export default class CanvasSettingModal extends HTMLElement {
       <div class="modal-overlay">
         <div class="modal-content">
           <h2>캔버스 크기 설정</h2>
-          <div class="input-group">
+          <div class="modal-input-group">
             <label>
               가로:
               <input type="number" id="canvas-width" value="${this.width}" min="100" max="2000">
