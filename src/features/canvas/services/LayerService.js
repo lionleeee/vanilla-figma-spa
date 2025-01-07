@@ -26,6 +26,7 @@ class LayerService {
       radius,
       properties,
     };
+
     this.layers.unshift(layer);
 
     this.notifyLayerUpdate();
