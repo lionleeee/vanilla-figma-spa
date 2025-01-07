@@ -94,6 +94,15 @@ class LayerService {
       })
     );
   }
+
+  getLayers() {
+    return this.layers;
+  }
+
+  importLayers(layers) {
+    this.layers = layers;
+    this.notifyLayerUpdate();
+  }
 }
 
 export const layerService = new LayerService();
