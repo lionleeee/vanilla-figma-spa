@@ -1,13 +1,27 @@
 export default class Header extends HTMLElement {
   connectedCallback() {
     this.render();
+    this.querySelector('.download-button').addEventListener(
+      'click',
+      this.handleDownload
+    );
   }
+
+  handleDownload = () => {
+    const canvas = document.getElementById('drawingCanvas');
+    if (!canvas) return;
+
+    const link = document.createElement('a');
+    link.download = 'canvas-drawing.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  };
 
   render() {
     this.innerHTML = `
     <header class="header">
       <h1 class="header-title">Canvas</h1>
-      <button class="download-button">
+      <button class="download-button" >
         <svg
           width="16"height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
