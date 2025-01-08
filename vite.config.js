@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         output: {
           manualChunks: {
-            vendor: ['./src/index.js', './src/core/router/Router.js'],
+            vendor: ['./src/Index.js', './src/core/router/Router.js'],
           },
         },
       },
