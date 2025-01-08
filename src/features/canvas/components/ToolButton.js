@@ -20,7 +20,6 @@ export default class ToolButton extends HTMLElement {
   handleClick() {
     const toolName = this.getAttribute('tool-name');
     const buttonElement = this.querySelector('.tool-button');
-    console.log('toolName', toolName);
     if (this.isSelected) {
       this.deselectTool(buttonElement);
       return;
@@ -39,7 +38,6 @@ export default class ToolButton extends HTMLElement {
   selectTool(buttonElement, toolName) {
     this.isSelected = true;
     buttonElement.classList.add('selected');
-    console.log('toolName', toolName);
     eventBus.emit('TOOL_SELECTED', { tool: toolName });
   }
 

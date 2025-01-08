@@ -4,6 +4,12 @@ import { layerService } from '../services/LayerService.js';
 import { initDragAndDrop } from '../utils/dragAndDrop.js';
 import './CanvasSettingModal.js';
 
+const CANVAS_TEMPLATE = `
+  <div class="canvas-wrapper">
+    <canvas id="drawingCanvas"></canvas>
+  </div>
+`;
+
 export default class CanvasArea extends HTMLElement {
   constructor() {
     super();
@@ -27,7 +33,7 @@ export default class CanvasArea extends HTMLElement {
 
   connectedCallback() {
     this.render();
-    this.showCanvasSettingModal();
+    this.createCanvasSettingModal();
     this.initCanvasEvents();
     this.initLayerEvents();
     this.initToolEvents();
@@ -35,7 +41,7 @@ export default class CanvasArea extends HTMLElement {
     this.initResetEvent();
     initDragAndDrop(this);
   }
-  showCanvasSettingModal() {
+  createCanvasSettingModal() {
     const modal = document.createElement('canvas-setting-modal');
     document.body.appendChild(modal);
   }
@@ -87,13 +93,9 @@ export default class CanvasArea extends HTMLElement {
 
       this._layerService.clearLayers();
 
-      this.innerHTML = `
-        <div class="canvas-wrapper">
-          <canvas id="drawingCanvas"></canvas>
-        </div>
-      `;
+      this.innerHTML = CANVAS_TEMPLATE;
 
-      this.showCanvasSettingModal();
+      this.createCanvasSettingModal();
     });
   }
 
@@ -102,11 +104,7 @@ export default class CanvasArea extends HTMLElement {
   }
 
   render() {
-    this.innerHTML = `
-    <div class="canvas-wrapper">
-      <canvas id="drawingCanvas" ></canvas>
-    </div>
-  `;
+    this.innerHTML = CANVAS_TEMPLATE;
   }
 
   initCanvas() {
