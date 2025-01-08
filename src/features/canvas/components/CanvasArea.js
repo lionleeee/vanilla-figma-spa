@@ -2,13 +2,20 @@ import { eventBus } from '@/core/EventBus.js';
 import DrawingService from '../services/draw/DrawingService.js';
 import { layerService } from '../services/LayerService.js';
 import { initDragAndDrop } from '../utils/dragAndDrop.js';
+import './CanvasSettingModal.js';
+
+const CANVAS_TEMPLATE = `
+  <div class="canvas-wrapper">
+    <canvas id="drawingCanvas"></canvas>
+  </div>
+`;
 
 export default class CanvasArea extends HTMLElement {
   constructor() {
     super();
     this.context = null;
-    this.width = 500;
-    this.height = 500;
+    this.width = null;
+    this.height = null;
     this.isDrawing = false;
     this.currentTool = null;
     this.currentProperty = {
@@ -16,6 +23,7 @@ export default class CanvasArea extends HTMLElement {
       height: 100,
       color: '#000',
       opacity: 1,
+      text: 'Text',
     };
     this._layerService = layerService;
     this.startX = null;
@@ -25,12 +33,26 @@ export default class CanvasArea extends HTMLElement {
 
   connectedCallback() {
     this.render();
-    this.initCanvas();
-    this.initDrawingEvents();
+    this.createCanvasSettingModal();
+    this.initCanvasEvents();
     this.initLayerEvents();
     this.initToolEvents();
     this.initPropertyEvents();
+    this.initResetEvent();
     initDragAndDrop(this);
+  }
+  createCanvasSettingModal() {
+    const modal = document.createElement('canvas-setting-modal');
+    document.body.appendChild(modal);
+  }
+  initCanvasEvents() {
+    eventBus.on('CANVAS_CREATED', ({ width, height }) => {
+      this.width = width;
+      this.height = height;
+      this.initCanvas();
+      this.initDrawingEvents();
+      initDragAndDrop(this);
+    });
   }
 
   initLayerEvents() {
@@ -46,7 +68,7 @@ export default class CanvasArea extends HTMLElement {
 
   initPropertyEvents() {
     eventBus.on('WIDTH_CHANGED', ({ width }) => {
-      this.currentProperty.width = Number(width);
+      this.currentProperty.width = width;
     });
     eventBus.on('HEIGHT_CHANGED', ({ height }) => {
       this.currentProperty.height = height;
@@ -55,7 +77,25 @@ export default class CanvasArea extends HTMLElement {
       this.currentProperty.color = color;
     });
     eventBus.on('OPACITY_CHANGED', ({ opacity }) => {
-      this.currentProperty.opacity = Number(opacity);
+      this.currentProperty.opacity = opacity;
+    });
+    eventBus.on('TEXT_CHANGED', ({ text }) => {
+      this.currentProperty.text = text;
+    });
+  }
+
+  initResetEvent() {
+    eventBus.on('CANVAS_RESET', () => {
+      this.width = null;
+      this.height = null;
+      this._drawingService = null;
+      this.context = null;
+
+      this._layerService.clearLayers();
+
+      this.innerHTML = CANVAS_TEMPLATE;
+
+      this.createCanvasSettingModal();
     });
   }
 
@@ -64,17 +104,14 @@ export default class CanvasArea extends HTMLElement {
   }
 
   render() {
-    this.innerHTML = `
-    <div class="canvas-wrapper">
-      <canvas id="drawingCanvas" width="${this.width}" height="${this.height}"></canvas>
-    </div>
-  `;
+    this.innerHTML = CANVAS_TEMPLATE;
   }
 
   initCanvas() {
     this.canvas = this.querySelector('#drawingCanvas');
     this.context = this.canvas.getContext('2d');
     this._drawingService = new DrawingService(this.context);
+
     this._drawingService.createCanvas(this.width, this.height);
   }
 

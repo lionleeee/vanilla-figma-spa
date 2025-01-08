@@ -5,6 +5,7 @@ export default class ToolButton extends HTMLElement {
     super();
 
     this.handleClick = this.handleClick.bind(this);
+    this.isSelected = false;
   }
 
   connectedCallback() {
@@ -18,8 +19,32 @@ export default class ToolButton extends HTMLElement {
 
   handleClick() {
     const toolName = this.getAttribute('tool-name');
-    eventBus.emit('TOOL_SELECTED', {
-      tool: toolName,
+    const buttonElement = this.querySelector('.tool-button');
+    if (this.isSelected) {
+      this.deselectTool(buttonElement);
+      return;
+    }
+
+    this.deselectAllTools();
+    this.selectTool(buttonElement, toolName);
+  }
+
+  deselectTool(buttonElement) {
+    this.isSelected = false;
+    buttonElement.classList.remove('selected');
+    eventBus.emit('TOOL_SELECTED', { tool: null });
+  }
+
+  selectTool(buttonElement, toolName) {
+    this.isSelected = true;
+    buttonElement.classList.add('selected');
+    eventBus.emit('TOOL_SELECTED', { tool: toolName });
+  }
+
+  deselectAllTools() {
+    document.querySelectorAll('tool-button').forEach((button) => {
+      button.isSelected = false;
+      button.querySelector('.tool-button')?.classList.remove('selected');
     });
   }
 
