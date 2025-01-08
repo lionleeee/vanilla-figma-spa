@@ -36,6 +36,11 @@ jobs:
           else
             echo "CHANGED=false" >> $GITHUB_ENV
           fi
+      - name: Configure Git User
+        if: env.CHANGED == 'true'
+        run: |
+          git config user.name "lionleeee"
+          git config user.email "lee97hun3@gmail.com"
 
       - name: Sync upstream changes
         if: env.CHANGED == 'true'
