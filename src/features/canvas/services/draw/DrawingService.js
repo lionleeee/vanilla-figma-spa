@@ -5,7 +5,7 @@ export default class DrawingService {
   constructor(context) {
     this.context = context;
     this.canvas = context.canvas;
-    this.preview = new Preview(context);
+    this.preview = null;
     this.drawShape = new DrawShape(context);
     this.startPoint = null;
     this.currentType = null;
@@ -23,6 +23,7 @@ export default class DrawingService {
 
     this.context.fillStyle = '#fff';
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.preview = new Preview(this.context);
   }
 
   generateId() {
@@ -34,7 +35,7 @@ export default class DrawingService {
     this.preview.previewShape(this.currentType, this.startPoint, { x, y });
   }
   quickDraw(x, y, property) {
-    const { width, height, color, opacity } = property;
+    const { width, height, color, opacity, text } = property;
     this.startPoint = { x, y };
     const endPoint = {
       x: x + width,
@@ -46,7 +47,7 @@ export default class DrawingService {
       this.startPoint,
       endPoint,
       this.generateId(),
-      { color, opacity }
+      { color, opacity, text }
     );
   }
 

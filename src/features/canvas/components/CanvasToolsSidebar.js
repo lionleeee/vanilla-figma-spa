@@ -1,9 +1,18 @@
 import './ToolButton.js';
 import './PropertyInput.js';
+import { eventBus } from '@/core/EventBus.js';
 
 export default class CanvasToolsSidebar extends HTMLElement {
   connectedCallback() {
     this.render();
+    this.addEventListeners();
+  }
+
+  addEventListeners() {
+    const resetButton = this.querySelector('.reset-button');
+    resetButton.addEventListener('click', () => {
+      eventBus.emit('CANVAS_RESET');
+    });
   }
 
   render() {
@@ -38,6 +47,13 @@ export default class CanvasToolsSidebar extends HTMLElement {
             value="#000"
             placeholder="#000">
           </property-input>
+        <property-input
+          type="text"
+          label="텍스트"
+          value="Text"
+          placeholder="텍스트 입력"
+          data-property-type="text">
+        </property-input>
         <property-input
           type="number"
           label="가로"

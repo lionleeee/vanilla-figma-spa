@@ -23,7 +23,6 @@ export default class PropertyInput extends HTMLElement {
     const propertyType = this.getAttribute('data-property-type');
     const value = e.target.value;
     const propertyValue = this.#getPropertyTypeValue(propertyType, value);
-
     eventBus.emit(`${propertyType.toUpperCase()}_CHANGED`, {
       [propertyType]: propertyValue,
     });
@@ -37,53 +36,57 @@ export default class PropertyInput extends HTMLElement {
     if (propertyType === 'opacity') {
       return Number(value) / 100;
     }
+    if (propertyType === 'text') {
+      return value;
+    }
 
     return Number(value);
   }
 
   render() {
-    const label = this.getAttribute('label') || '';
-    const type = this.getAttribute('type') || 'text';
-    const placeholder = this.getAttribute('placeholder') || '';
-    const min = this.getAttribute('min') || 0;
-    const max = this.getAttribute('max') || 100;
-    const value = this.getAttribute('value') || 100;
+    const attrs = {
+      label: this.getAttribute('label') || '',
+      type: this.getAttribute('type') || 'text',
+      placeholder: this.getAttribute('placeholder') || '',
+      min: this.getAttribute('min') || 0,
+      max: this.getAttribute('max') || 100,
+      value: this.getAttribute('value') || 100,
+    };
 
-    let inputElement = ``;
-
-    if (type === 'range') {
-      inputElement = `
+    const inputTemplates = {
+      range: () => `
         <input 
           type="range" 
           class="range-slider" 
-          min="${min}" 
-          max="${max}" 
-          value="${value}"
+          min="${attrs.min}" 
+          max="${attrs.max}" 
+          value="${attrs.value}"
         />
-      `;
-    } else if (type === 'color') {
-      inputElement = `
+      `,
+      color: () => `
         <input 
           type="color" 
           class="color-picker" 
-          value="${value}"
+          value="${attrs.value}"
         />
-      `;
-    } else {
-      inputElement = `
+      `,
+      default: () => `
         <input 
-          type="${type}" 
+          type="${attrs.type}" 
           class="input-field" 
-          value="${value}"
-          placeholder="${placeholder}"
+          value="${attrs.value}"
+          placeholder="${attrs.placeholder}"
         />
-      `;
-    }
+      `,
+    };
+
+    const getInputElement = () =>
+      (inputTemplates[attrs.type] || inputTemplates.default)();
 
     this.innerHTML = `
       <div class="property-input">
-        <label class="input-label">${label}</label>
-        ${inputElement}
+        <label class="input-label">${attrs.label}</label>
+        ${getInputElement()}
       </div>
     `;
   }

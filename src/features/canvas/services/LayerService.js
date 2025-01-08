@@ -31,6 +31,11 @@ class LayerService {
     this.notifyLayerUpdate();
     return layer;
   }
+  clearLayers() {
+    this.layers = [];
+    this.currentId = 0;
+    this.notifyLayerUpdate();
+  }
 
   changeLayerZIndex(droppedId, targetId, isAbove) {
     targetId = Number(targetId);
