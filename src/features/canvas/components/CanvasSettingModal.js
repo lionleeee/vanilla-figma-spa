@@ -41,6 +41,11 @@ export default class CanvasSettingModal extends HTMLElement {
       const width = parseInt(this.querySelector('#canvas-width').value);
       const height = parseInt(this.querySelector('#canvas-height').value);
 
+      if (width > 2000 || height > 2000) {
+        alert('캔버스 크기는 2000px를 초과할 수 없습니다.');
+        return;
+      }
+
       eventBus.emit('CANVAS_CREATED', { width, height });
       this.remove();
     });

@@ -5,6 +5,10 @@ export default class Preview {
     this.context = context;
     this.canvas = this.createPreviewCanvas();
     this.previewContext = this.canvas.getContext('2d');
+
+    this.updatePosition = this.updatePosition.bind(this);
+    this.scrollContainer = document.querySelector('.canvas-wrapper');
+    this.previewScrollEvent();
   }
 
   createPreviewCanvas() {
@@ -14,16 +18,19 @@ export default class Preview {
     canvas.style.position = 'absolute';
     canvas.style.pointerEvents = 'none';
 
-    const updatePosition = () => {
-      const rect = this.context.canvas.getBoundingClientRect();
-      canvas.style.top = `${rect.top}px`;
-      canvas.style.left = `${rect.left}px`;
-    };
-
-    updatePosition();
-
     this.context.canvas.parentNode.appendChild(canvas);
     return canvas;
+  }
+  updatePosition() {
+    const rect = this.context.canvas.getBoundingClientRect();
+    this.canvas.style.top = `${rect.top - window.scrollY}px`;
+    this.canvas.style.left = `${rect.left + window.scrollX}px`;
+  }
+  previewScrollEvent() {
+    this.scrollContainer.addEventListener('scroll', () =>
+      this.updatePosition()
+    );
+    window.addEventListener('resize', () => this.updatePosition());
   }
 
   clear() {
