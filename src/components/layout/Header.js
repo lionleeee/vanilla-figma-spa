@@ -7,7 +7,7 @@ export default class Header extends HTMLElement {
     const buttonHandlers = {
       'download-button': this.handleDownload,
       'export-button': this.handleExport,
-      'import-button': this.handleImport,
+      'import-button': this.handleFileImport,
     };
 
     Object.entries(buttonHandlers).forEach(([id, handler]) => {
@@ -37,6 +37,32 @@ export default class Header extends HTMLElement {
     link.click();
 
     URL.revokeObjectURL(url);
+  };
+
+  handleFileImport = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.bin';
+    input.style.display = 'none';
+
+    input.onchange = async (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      try {
+        const buffer = await file.arrayBuffer();
+        this.readFile(buffer);
+      } catch (error) {
+        console.error('파일 불러오기 실패:', error);
+      }
+    };
+
+    input.click();
+  };
+
+  readFile = (buffer) => {
+    const layers = binaryConverter.fromBinary(buffer);
+    layerService.importLayers(layers);
   };
 
   render() {

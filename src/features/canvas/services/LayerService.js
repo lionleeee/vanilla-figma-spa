@@ -68,9 +68,7 @@ class LayerService {
     this.updateZIndices();
     this.notifyLayerUpdate();
 
-    eventBus.emit('LAYERS_REORDERED', {
-      layers: this.layers,
-    });
+    this.redrawEvent();
   }
 
   updateZIndices() {
@@ -94,6 +92,11 @@ class LayerService {
       })
     );
   }
+  redrawEvent() {
+    eventBus.emit('LAYERS_REORDERED', {
+      layers: this.layers,
+    });
+  }
 
   getLayers() {
     return this.layers;
@@ -102,6 +105,7 @@ class LayerService {
   importLayers(layers) {
     this.layers = layers;
     this.notifyLayerUpdate();
+    this.redrawEvent();
   }
 }
 

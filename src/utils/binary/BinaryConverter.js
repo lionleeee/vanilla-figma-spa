@@ -80,4 +80,94 @@ export const binaryConverter = {
 
     return buffer;
   },
+  fromBinary(buffer) {
+    const view = new DataView(buffer);
+    let offset = 0;
+
+    const layerCount = view.getUint32(offset);
+    offset += 4;
+
+    const layers = [];
+
+    for (let i = 0; i < layerCount; i++) {
+      // 기본 속성
+      const id = view.getUint32(offset);
+      offset += 4;
+
+      // name
+      const nameLength = view.getUint8(offset);
+      offset += 1;
+      let name = '';
+      for (let j = 0; j < nameLength; j++) {
+        name += String.fromCharCode(view.getUint8(offset + j));
+      }
+      offset += nameLength;
+
+      // type
+      const typeLength = view.getUint8(offset);
+      offset += 1;
+      let type = '';
+      for (let j = 0; j < typeLength; j++) {
+        type += String.fromCharCode(view.getUint8(offset + j));
+      }
+      offset += typeLength;
+
+      // 좌표 읽기
+      const x = view.getFloat32(offset);
+      offset += 4;
+      const y = view.getFloat32(offset);
+      offset += 4;
+      const z = view.getFloat32(offset);
+      offset += 4;
+
+      // 크기 관련 속성
+      const width = view.getFloat32(offset);
+      offset += 4;
+      const height = view.getFloat32(offset);
+      offset += 4;
+      const radius = view.getFloat32(offset);
+      offset += 4;
+
+      // properties
+      const colorLength = view.getUint8(offset);
+      offset += 1;
+      let color = '';
+      for (let j = 0; j < colorLength; j++) {
+        color += String.fromCharCode(view.getUint8(offset + j));
+      }
+      offset += colorLength;
+
+      const opacity = view.getFloat32(offset);
+      offset += 4;
+
+      const properties = { color, opacity };
+
+      // text type인 경우 text 속성
+      if (type === 'text') {
+        const textLength = view.getUint16(offset);
+        offset += 2;
+        let text = '';
+        for (let j = 0; j < textLength; j++) {
+          text += String.fromCharCode(view.getUint8(offset + j));
+        }
+        offset += textLength;
+        properties.text = text;
+      }
+
+      layers.push({
+        id,
+        name,
+        type,
+        x,
+        y,
+        z,
+        width,
+        height,
+        radius,
+        properties,
+      });
+    }
+
+    return layers;
+  },
 };
