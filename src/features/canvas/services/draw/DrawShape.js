@@ -28,7 +28,6 @@ export default class DrawShape {
         radius = radius
           ? radius
           : Math.sqrt(width * width + height * height) / 2;
-        console.log(radius);
         shape = ShapeFactory.createShape(
           'circle',
           this.context,

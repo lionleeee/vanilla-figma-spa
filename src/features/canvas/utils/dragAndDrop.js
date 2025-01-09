@@ -1,4 +1,5 @@
 import { eventBus } from '@/core/event/EventBus.js';
+import { EVENTS } from '../../../core/event/Events';
 
 export function initDragAndDrop(element) {
   let draggedItem = null;
@@ -39,7 +40,7 @@ export function initDragAndDrop(element) {
       return;
     }
 
-    eventBus.emit('LAYER_DROPPED', {
+    eventBus.emit(EVENTS.LAYER.DROPPED, {
       droppedId: draggedItem.dataset.id,
       targetId: previousTarget.dataset.id,
       isAbove: dropPosition,

@@ -1,4 +1,5 @@
 import { eventBus } from '@/core/event/EventBus.js';
+import { EVENTS } from '../../../core/event/Events';
 
 export default class ToolButton extends HTMLElement {
   constructor() {
@@ -20,7 +21,6 @@ export default class ToolButton extends HTMLElement {
   handleClick() {
     const toolName = this.getAttribute('tool-name');
     const buttonElement = this.querySelector('.tool-button');
-    console.log('toolName', toolName);
     if (this.isSelected) {
       this.deselectTool(buttonElement);
       return;
@@ -33,14 +33,13 @@ export default class ToolButton extends HTMLElement {
   deselectTool(buttonElement) {
     this.isSelected = false;
     buttonElement.classList.remove('selected');
-    eventBus.emit('TOOL_SELECTED', { tool: null });
+    eventBus.emit(EVENTS.TOOL.SELECTED, { tool: null });
   }
 
   selectTool(buttonElement, toolName) {
     this.isSelected = true;
     buttonElement.classList.add('selected');
-    console.log('toolName', toolName);
-    eventBus.emit('TOOL_SELECTED', { tool: toolName });
+    eventBus.emit(EVENTS.TOOL.SELECTED, { tool: toolName });
   }
 
   deselectAllTools() {

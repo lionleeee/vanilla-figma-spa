@@ -1,4 +1,5 @@
 import { eventBus } from '@/core/event/EventBus.js';
+import { EVENTS } from '../../../core/event/Events';
 
 class LayerService {
   static instance = null;
@@ -86,14 +87,12 @@ class LayerService {
   }
 
   notifyLayerUpdate() {
-    document.dispatchEvent(
-      new CustomEvent('layers-updated', {
-        detail: { layers: this.layers },
-      })
-    );
+    eventBus.emit(EVENTS.LAYER.UPDATED, {
+      layers: this.layers,
+    });
   }
   redrawEvent() {
-    eventBus.emit('LAYERS_REORDERED', {
+    eventBus.emit(EVENTS.LAYER.REORDERED, {
       layers: this.layers,
     });
   }
