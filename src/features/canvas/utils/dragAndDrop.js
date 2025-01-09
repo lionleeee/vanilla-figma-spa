@@ -1,4 +1,4 @@
-import { eventBus } from '../../../core/EventBus';
+import { eventBus } from '@/core/event/EventBus.js';
 
 export function initDragAndDrop(element) {
   let draggedItem = null;

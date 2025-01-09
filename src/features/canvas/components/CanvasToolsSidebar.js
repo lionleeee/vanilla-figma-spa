@@ -1,6 +1,6 @@
 import './ToolButton.js';
 import './PropertyInput.js';
-import { eventBus } from '@/core/EventBus.js';
+import { eventBus } from '@/core/event/EventBus.js';
 
 export default class CanvasToolsSidebar extends HTMLElement {
   connectedCallback() {

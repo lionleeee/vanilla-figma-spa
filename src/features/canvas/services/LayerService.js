@@ -1,4 +1,4 @@
-import { eventBus } from '@/core/EventBus.js';
+import { eventBus } from '@/core/event/EventBus.js';
 
 class LayerService {
   static instance = null;
