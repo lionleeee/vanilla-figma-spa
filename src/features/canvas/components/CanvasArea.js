@@ -28,7 +28,7 @@ export default class CanvasArea extends HTMLElement {
 
   connectedCallback() {
     this.render();
-    this.showCanvasSettingModal();
+    this.createCanvasSettingModal();
     this.handleCanvasEvents();
     this.handleLayerEvents();
     this.handleToolEvents();
@@ -58,20 +58,16 @@ export default class CanvasArea extends HTMLElement {
   }
 
   handlePropertyEvents() {
-    eventBus.on(EVENTS.PROPERTY.WIDTH_CHANGED, ({ width }) => {
-      this.handlePropertyUpdate('width', width);
-    });
-    eventBus.on(EVENTS.PROPERTY.HEIGHT_CHANGED, ({ height }) => {
-      this.handlePropertyUpdate('height', height);
-    });
-    eventBus.on(EVENTS.PROPERTY.COLOR_CHANGED, ({ color }) => {
-      this.handlePropertyUpdate('color', color);
-    });
-    eventBus.on(EVENTS.PROPERTY.OPACITY_CHANGED, ({ opacity }) => {
-      this.handlePropertyUpdate('opacity', opacity);
-    });
-    eventBus.on(EVENTS.PROPERTY.TEXT_CHANGED, ({ text }) => {
-      this.handlePropertyUpdate('text', text);
+    const propertyEvents = [
+      { event: EVENTS.PROPERTY.WIDTH_CHANGED, key: 'width' },
+      { event: EVENTS.PROPERTY.HEIGHT_CHANGED, key: 'height' },
+      { event: EVENTS.PROPERTY.COLOR_CHANGED, key: 'color' },
+      { event: EVENTS.PROPERTY.OPACITY_CHANGED, key: 'opacity' },
+      { event: EVENTS.PROPERTY.TEXT_CHANGED, key: 'text' },
+    ];
+
+    propertyEvents.forEach(({ event, key }) => {
+      eventBus.on(event, (data) => this.handlePropertyUpdate(key, data[key]));
     });
   }
 
