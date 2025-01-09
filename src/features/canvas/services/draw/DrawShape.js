@@ -5,7 +5,7 @@ export default class DrawShape {
     this.context = context;
   }
 
-  draw(type, startPoint, endPoint, id, properties = {}) {
+  draw(type, startPoint, endPoint, id, properties = {}, radius = 0) {
     const width = endPoint.x - startPoint.x;
     const height = endPoint.y - startPoint.y;
 
@@ -25,7 +25,10 @@ export default class DrawShape {
         );
         break;
       case 'circle':
-        const radius = Math.sqrt(width * width + height * height) / 2;
+        radius = radius
+          ? radius
+          : Math.sqrt(width * width + height * height) / 2;
+        console.log(radius);
         shape = ShapeFactory.createShape(
           'circle',
           this.context,
