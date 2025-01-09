@@ -14,11 +14,17 @@ export default class Preview {
     this.initEventListeners();
   }
 
+  handlePositionUpdate() {
+    const { top, left } = this.getCanvasPosition();
+    this.canvas.style.top = `${top}px`;
+    this.canvas.style.left = `${left}px`;
+  }
+
   initEventListeners() {
-    this.updatePosition = this.updatePosition.bind(this);
+    this.handlePositionUpdate = this.handlePositionUpdate.bind(this);
     this.scrollContainer = document.querySelector('.canvas-wrapper');
-    this.scrollContainer.addEventListener('scroll', this.updatePosition);
-    window.addEventListener('resize', this.updatePosition);
+    this.scrollContainer.addEventListener('scroll', this.handlePositionUpdate);
+    window.addEventListener('resize', this.handlePositionUpdate);
   }
 
   getCanvasPosition() {
@@ -50,12 +56,6 @@ export default class Preview {
     const { top, left } = this.getCanvasPosition();
     canvas.style.top = `${top}px`;
     canvas.style.left = `${left}px`;
-  }
-
-  updatePosition() {
-    const { top, left } = this.getCanvasPosition();
-    this.canvas.style.top = `${top}px`;
-    this.canvas.style.left = `${left}px`;
   }
 
   calculateShapeSize(startPoint, currentPoint) {

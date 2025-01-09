@@ -30,13 +30,13 @@ class LayerService {
 
     this.layers.unshift(layer);
 
-    this.notifyLayerUpdate();
+    this.emitLayerUpdate();
     return layer;
   }
   clearLayers() {
     this.layers = [];
     this.currentId = 0;
-    this.notifyLayerUpdate();
+    this.emitLayerUpdate();
   }
 
   changeLayerZIndex(droppedId, targetId, isAbove) {
@@ -67,9 +67,9 @@ class LayerService {
     }
 
     this.updateZIndices();
-    this.notifyLayerUpdate();
+    this.emitLayerUpdate();
 
-    this.redrawEvent();
+    this.emitLayerRedraw();
   }
 
   updateZIndices() {
@@ -82,16 +82,16 @@ class LayerService {
     const layer = this.layers.find((layer) => layer.id === id);
     if (layer) {
       layer.name = newName;
-      this.notifyLayerUpdate();
+      this.emitLayerUpdate();
     }
   }
 
-  notifyLayerUpdate() {
+  emitLayerUpdate() {
     eventBus.emit(EVENTS.LAYER.UPDATED, {
       layers: this.layers,
     });
   }
-  redrawEvent() {
+  emitLayerRedraw() {
     eventBus.emit(EVENTS.LAYER.REORDERED, {
       layers: this.layers,
     });
@@ -103,8 +103,8 @@ class LayerService {
 
   importLayers(layers) {
     this.layers = layers;
-    this.notifyLayerUpdate();
-    this.redrawEvent();
+    this.emitLayerUpdate();
+    this.emitLayerRedraw();
   }
 }
 
