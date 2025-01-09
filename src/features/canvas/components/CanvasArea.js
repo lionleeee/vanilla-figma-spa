@@ -3,6 +3,7 @@ import DrawingService from '../services/draw/DrawingService.js';
 import { layerService } from '../services/LayerService.js';
 import { initDragAndDrop } from '../utils/dragAndDrop.js';
 import './CanvasSettingModal.js';
+import { EVENTS } from '../../../core/event/Events.js';
 
 export default class CanvasArea extends HTMLElement {
   constructor() {
@@ -40,7 +41,7 @@ export default class CanvasArea extends HTMLElement {
     document.body.appendChild(modal);
   }
   initCanvasEvents() {
-    eventBus.on('CANVAS_CREATED', ({ width, height }) => {
+    eventBus.on(EVENTS.CANVAS.CREATED, ({ width, height }) => {
       this.width = width;
       this.height = height;
       this.initCanvas();
@@ -50,36 +51,36 @@ export default class CanvasArea extends HTMLElement {
   }
 
   initLayerEvents() {
-    eventBus.on('LAYERS_REORDERED', ({ layers }) => {
+    eventBus.on(EVENTS.LAYER.REORDERED, ({ layers }) => {
       this.redrawByZIndex(layers);
     });
   }
   initToolEvents() {
-    eventBus.on('TOOL_SELECTED', ({ tool }) => {
+    eventBus.on(EVENTS.TOOL.SELECTED, ({ tool }) => {
       this.currentTool = tool;
     });
   }
 
   initPropertyEvents() {
-    eventBus.on('WIDTH_CHANGED', ({ width }) => {
+    eventBus.on(EVENTS.PROPERTY.WIDTH_CHANGED, ({ width }) => {
       this.currentProperty.width = width;
     });
-    eventBus.on('HEIGHT_CHANGED', ({ height }) => {
+    eventBus.on(EVENTS.PROPERTY.HEIGHT_CHANGED, ({ height }) => {
       this.currentProperty.height = height;
     });
-    eventBus.on('COLOR_CHANGED', ({ color }) => {
+    eventBus.on(EVENTS.PROPERTY.COLOR_CHANGED, ({ color }) => {
       this.currentProperty.color = color;
     });
-    eventBus.on('OPACITY_CHANGED', ({ opacity }) => {
+    eventBus.on(EVENTS.PROPERTY.OPACITY_CHANGED, ({ opacity }) => {
       this.currentProperty.opacity = opacity;
     });
-    eventBus.on('TEXT_CHANGED', ({ text }) => {
+    eventBus.on(EVENTS.PROPERTY.TEXT_CHANGED, ({ text }) => {
       this.currentProperty.text = text;
     });
   }
 
   initResetEvent() {
-    eventBus.on('CANVAS_RESET', () => {
+    eventBus.on(EVENTS.CANVAS.RESET, () => {
       this.width = null;
       this.height = null;
       this._drawingService = null;
