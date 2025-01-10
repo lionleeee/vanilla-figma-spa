@@ -1,7 +1,8 @@
-import { eventBus } from '../../../core/EventBus.js';
+import { eventBus } from '@/core/event/EventBus.js';
 
 import { layerService } from '../services/LayerService.js';
 import { initDragAndDrop } from '../utils/dragAndDrop.js';
+import { EVENTS } from '../../../core/event/Events.js';
 
 export default class CanvasLayerManage extends HTMLElement {
   constructor() {
@@ -25,12 +26,12 @@ export default class CanvasLayerManage extends HTMLElement {
   }
 
   addEventListeners() {
-    document.addEventListener('layers-updated', (e) => {
-      this.layers = e.detail.layers;
+    eventBus.on(EVENTS.LAYER.UPDATED, (layerData) => {
+      this.layers = layerData.layers ?? [];
       this.renderLayers();
     });
 
-    eventBus.on('LAYER_DROPPED', ({ droppedId, targetId, isAbove }) => {
+    eventBus.on(EVENTS.LAYER.DROPPED, ({ droppedId, targetId, isAbove }) => {
       layerService.changeLayerZIndex(droppedId, targetId, isAbove);
     });
 

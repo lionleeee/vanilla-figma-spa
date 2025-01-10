@@ -1,4 +1,5 @@
-import { eventBus } from '@/core/EventBus.js';
+import { eventBus } from '@/core/event/EventBus.js';
+import { EVENTS } from '../../../core/event/Events';
 
 class LayerService {
   static instance = null;
@@ -26,15 +27,16 @@ class LayerService {
       radius,
       properties,
     };
+
     this.layers.unshift(layer);
 
-    this.notifyLayerUpdate();
+    this.emitLayerUpdate();
     return layer;
   }
   clearLayers() {
     this.layers = [];
     this.currentId = 0;
-    this.notifyLayerUpdate();
+    this.emitLayerUpdate();
   }
 
   changeLayerZIndex(droppedId, targetId, isAbove) {
@@ -65,11 +67,9 @@ class LayerService {
     }
 
     this.updateZIndices();
-    this.notifyLayerUpdate();
+    this.emitLayerUpdate();
 
-    eventBus.emit('LAYERS_REORDERED', {
-      layers: this.layers,
-    });
+    this.emitLayerRedraw();
   }
 
   updateZIndices() {
@@ -82,16 +82,29 @@ class LayerService {
     const layer = this.layers.find((layer) => layer.id === id);
     if (layer) {
       layer.name = newName;
-      this.notifyLayerUpdate();
+      this.emitLayerUpdate();
     }
   }
 
-  notifyLayerUpdate() {
-    document.dispatchEvent(
-      new CustomEvent('layers-updated', {
-        detail: { layers: this.layers },
-      })
-    );
+  emitLayerUpdate() {
+    eventBus.emit(EVENTS.LAYER.UPDATED, {
+      layers: this.layers,
+    });
+  }
+  emitLayerRedraw() {
+    eventBus.emit(EVENTS.LAYER.REORDERED, {
+      layers: this.layers,
+    });
+  }
+
+  getLayers() {
+    return this.layers;
+  }
+
+  importLayers(layers) {
+    this.layers = layers;
+    this.emitLayerUpdate();
+    this.emitLayerRedraw();
   }
 }
 

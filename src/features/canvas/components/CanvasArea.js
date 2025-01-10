@@ -1,8 +1,9 @@
-import { eventBus } from '@/core/EventBus.js';
+import { eventBus } from '@/core/event/EventBus.js';
 import DrawingService from '../services/draw/DrawingService.js';
 import { layerService } from '../services/LayerService.js';
 import { initDragAndDrop } from '../utils/dragAndDrop.js';
 import './CanvasSettingModal.js';
+import { EVENTS } from '../../../core/event/Events.js';
 
 const CANVAS_TEMPLATE = `
   <div class="canvas-wrapper">
@@ -34,69 +35,159 @@ export default class CanvasArea extends HTMLElement {
   connectedCallback() {
     this.render();
     this.createCanvasSettingModal();
-    this.initCanvasEvents();
-    this.initLayerEvents();
-    this.initToolEvents();
-    this.initPropertyEvents();
-    this.initResetEvent();
+
+    this.handleCanvasEvents();
+    this.handleLayerEvents();
+    this.handleToolEvents();
+    this.handlePropertyEvents();
+    this.handleResetEvent();
+
     initDragAndDrop(this);
   }
   createCanvasSettingModal() {
     const modal = document.createElement('canvas-setting-modal');
     document.body.appendChild(modal);
   }
-  initCanvasEvents() {
-    eventBus.on('CANVAS_CREATED', ({ width, height }) => {
-      this.width = width;
-      this.height = height;
-      this.initCanvas();
-      this.initDrawingEvents();
-      initDragAndDrop(this);
+  handleCanvasEvents() {
+    eventBus.on(EVENTS.CANVAS.CREATED, ({ width, height }) => {
+      this.handleCanvasCreated(width, height);
     });
   }
 
-  initLayerEvents() {
-    eventBus.on('LAYERS_REORDERED', ({ layers }) => {
-      this.redrawByZIndex(layers);
+  handleLayerEvents() {
+    eventBus.on(EVENTS.LAYER.REORDERED, ({ layers }) => {
+      this.handleLayerReorder(layers);
     });
   }
-  initToolEvents() {
-    eventBus.on('TOOL_SELECTED', ({ tool }) => {
-      this.currentTool = tool;
-    });
-  }
-
-  initPropertyEvents() {
-    eventBus.on('WIDTH_CHANGED', ({ width }) => {
-      this.currentProperty.width = width;
-    });
-    eventBus.on('HEIGHT_CHANGED', ({ height }) => {
-      this.currentProperty.height = height;
-    });
-    eventBus.on('COLOR_CHANGED', ({ color }) => {
-      this.currentProperty.color = color;
-    });
-    eventBus.on('OPACITY_CHANGED', ({ opacity }) => {
-      this.currentProperty.opacity = opacity;
-    });
-    eventBus.on('TEXT_CHANGED', ({ text }) => {
-      this.currentProperty.text = text;
+  handleToolEvents() {
+    eventBus.on(EVENTS.TOOL.SELECTED, ({ tool }) => {
+      this.handleToolSelect(tool);
     });
   }
 
-  initResetEvent() {
-    eventBus.on('CANVAS_RESET', () => {
-      this.width = null;
-      this.height = null;
-      this._drawingService = null;
-      this.context = null;
+  handlePropertyEvents() {
+    const propertyEvents = [
+      { event: EVENTS.PROPERTY.WIDTH_CHANGED, key: 'width' },
+      { event: EVENTS.PROPERTY.HEIGHT_CHANGED, key: 'height' },
+      { event: EVENTS.PROPERTY.COLOR_CHANGED, key: 'color' },
+      { event: EVENTS.PROPERTY.OPACITY_CHANGED, key: 'opacity' },
+      { event: EVENTS.PROPERTY.TEXT_CHANGED, key: 'text' },
+    ];
 
-      this._layerService.clearLayers();
-
-      this.innerHTML = CANVAS_TEMPLATE;
-
-      this.createCanvasSettingModal();
+    propertyEvents.forEach(({ event, key }) => {
+      eventBus.on(event, (data) => this.handlePropertyUpdate(key, data[key]));
     });
+  }
+
+  handlePropertyUpdate(property, value) {
+    this.currentProperty[property] = value;
+  }
+
+  handleToolSelect(tool) {
+    this.currentTool = tool;
+  }
+
+  handleResetEvent() {
+    eventBus.on(EVENTS.CANVAS.RESET, () => {
+      this.handleCanvasReset();
+    });
+  }
+
+  handleCanvasReset() {
+    this.width = null;
+    this.height = null;
+    this._drawingService = null;
+    this.context = null;
+
+    this._layerService.clearLayers();
+    this.resetCanvas();
+    this.showCanvasSettingModal();
+  }
+
+
+  resetCanvas() {
+    this.innerHTML = `
+      <div class="canvas-wrapper">
+        <canvas id="drawingCanvas"></canvas>
+      </div>
+    `;
+  }
+
+  handleDrawingEvents() {
+    this.canvas.addEventListener(
+      'mousedown',
+      this.handleDrawingStart.bind(this)
+    );
+    this.canvas.addEventListener(
+      'mousemove',
+      this.handleDrawingMove.bind(this)
+    );
+    this.canvas.addEventListener('mouseup', this.handleDrawingEnd.bind(this));
+    this.canvas.addEventListener(
+      'mouseleave',
+      this.handleDrawingCancel.bind(this)
+    );
+  }
+
+  handleDrawingStart(e) {
+    this.isDrawing = true;
+    const { offsetX, offsetY } = e;
+    this.startX = offsetX;
+    this.startY = offsetY;
+    this._drawingService.startDrawing(
+      this.currentTool,
+      offsetX,
+      offsetY,
+      this.currentProperty
+    );
+  }
+
+  handleDrawingMove(e) {
+    if (!this.isDrawing) return;
+    const { offsetX, offsetY } = e;
+    this._drawingService.previewShape(offsetX, offsetY);
+  }
+
+  handleDrawingEnd(e) {
+    if (!this.isDrawing) return;
+    const { offsetX, offsetY } = e;
+
+    const result = this._drawingService.handleDrawingComplete(
+      offsetX,
+      offsetY,
+      this.startX,
+      this.startY,
+      this.currentProperty
+    );
+
+    if (result) {
+      this._layerService.addLayer(
+        result.id,
+        this.currentTool,
+        result.x,
+        result.y,
+        result.width || result.endX,
+        result.height || result.endY,
+        result.radius,
+        result.properties
+      );
+    }
+
+    this.resetDrawingState();
+  }
+
+  handleDrawingCancel() {
+    if (this.isDrawing) {
+      this.resetDrawingState();
+      this._drawingService.preview.clear();
+    }
+  }
+
+  resetDrawingState() {
+    this.isDrawing = false;
+    this.startX = null;
+    this.startY = null;
+
   }
 
   redrawByZIndex(layers) {
@@ -115,67 +206,16 @@ export default class CanvasArea extends HTMLElement {
     this._drawingService.createCanvas(this.width, this.height);
   }
 
-  initDrawingEvents() {
-    this.canvas.addEventListener('mousedown', (e) => {
-      this.isDrawing = true;
-      const { offsetX, offsetY } = e;
-      this.startX = offsetX;
-      this.startY = offsetY;
-      this._drawingService.startDrawing(
-        this.currentTool,
-        offsetX,
-        offsetY,
-        this.currentProperty
-      );
-    });
-
-    this.canvas.addEventListener('mousemove', (e) => {
-      if (!this.isDrawing) return;
-      const { offsetX, offsetY } = e;
-      this._drawingService.previewShape(offsetX, offsetY);
-    });
-
-    this.canvas.addEventListener('mouseup', (e) => {
-      if (!this.isDrawing) return;
-      const { offsetX, offsetY } = e;
-
-      const result = this._drawingService.handleDrawingComplete(
-        offsetX,
-        offsetY,
-        this.startX,
-        this.startY,
-        this.currentProperty
-      );
-
-      if (result) {
-        this._layerService.addLayer(
-          result.id,
-          this.currentTool,
-          result.x,
-          result.y,
-          result.width || result.endX,
-          result.height || result.endY,
-          result.radius,
-          result.properties
-        );
-      }
-
-      this.isDrawing = false;
-      this.startX = null;
-      this.startY = null;
-    });
-
-    this.canvas.addEventListener('mouseleave', () => {
-      if (this.isDrawing) {
-        this.isDrawing = false;
-        this._drawingService.preview.clear();
-      }
-    });
+  handleCanvasCreated(width, height) {
+    this.width = width;
+    this.height = height;
+    this.initCanvas();
+    this.handleDrawingEvents();
+    initDragAndDrop(this);
   }
 
-  handleToolSelected(event) {
-    const { tool } = event.detail;
-    this.currentTool = tool;
+  handleLayerReorder(layers) {
+    this.redrawByZIndex(layers);
   }
 }
 customElements.define('canvas-area', CanvasArea);

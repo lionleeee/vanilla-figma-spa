@@ -1,4 +1,4 @@
-import { eventBus } from '../../../core/EventBus';
+import { eventBus } from '@/core/event/EventBus.js';
 
 export default class PropertyInput extends HTMLElement {
   static get observedAttributes() {

@@ -1,6 +1,7 @@
 import './ToolButton.js';
 import './PropertyInput.js';
-import { eventBus } from '@/core/EventBus.js';
+import { eventBus } from '@/core/event/EventBus.js';
+import { EVENTS } from '../../../core/event/Events.js';
 
 export default class CanvasToolsSidebar extends HTMLElement {
   connectedCallback() {
@@ -11,7 +12,7 @@ export default class CanvasToolsSidebar extends HTMLElement {
   addEventListeners() {
     const resetButton = this.querySelector('.reset-button');
     resetButton.addEventListener('click', () => {
-      eventBus.emit('CANVAS_RESET');
+      eventBus.emit(EVENTS.CANVAS.RESET);
     });
   }
 
