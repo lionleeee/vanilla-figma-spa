@@ -1,4 +1,5 @@
-import { eventBus } from '@/core/EventBus.js';
+import { eventBus } from '@/core/event/EventBus.js';
+import { EVENTS } from '../../../core/event/Events';
 
 export default class CanvasSettingModal extends HTMLElement {
   constructor() {
@@ -17,7 +18,7 @@ export default class CanvasSettingModal extends HTMLElement {
       <div class="modal-overlay">
         <div class="modal-content">
           <h2>캔버스 크기 설정</h2>
-          <div class="input-group">
+          <div class="modal-input-group">
             <label>
               가로:
               <input type="number" id="canvas-width" value="${this.width}" min="100" max="2000">
@@ -41,7 +42,12 @@ export default class CanvasSettingModal extends HTMLElement {
       const width = parseInt(this.querySelector('#canvas-width').value);
       const height = parseInt(this.querySelector('#canvas-height').value);
 
-      eventBus.emit('CANVAS_CREATED', { width, height });
+      if (width > 2000 || height > 2000) {
+        alert('캔버스 크기는 2000px를 초과할 수 없습니다.');
+        return;
+      }
+
+      eventBus.emit(EVENTS.CANVAS.CREATED, { width, height });
       this.remove();
     });
   }

@@ -5,8 +5,8 @@ body {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100%;
-  overflow-x: hidden;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .header {
@@ -24,7 +24,13 @@ body {
   font-weight: 500;
 }
 
-.download-button {
+.button-group {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.header-button {
   padding: 8px 16px;
   background: white;
   border: 1px solid #e0e0e0;
@@ -35,7 +41,7 @@ body {
   gap: 6px;
 }
 
-.download-button:hover {
+.header-button:hover {
   background: #f5f5f5;
 }
 
@@ -43,7 +49,7 @@ body {
   display: flex;
   flex-direction: row;
   width: 100%;
-  min-height: calc(100vh - 57px);
+  height: calc(100% - 37px);
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -53,12 +59,13 @@ canvas-layer-manage {
 }
 canvas-area {
   width: 60%;
+  height: calc(100vh - 37px - 59px);
 }
 canvas-tools-sidebar {
   width: 20%;
 }
 .layer-sidebar {
-  height: 100vh;
+  height: calc(100vh - 37px - 59px);
   background: white;
   border-right: 1px solid #e0e0e0;
   padding: 20px;
@@ -85,7 +92,7 @@ canvas-tools-sidebar {
 }
 
 .tools-sidebar {
-  height: 100vh;
+  height: calc(100vh - 37px - 59px);
   background: white;
   border-left: 1px solid #e0e0e0;
   padding: 20px;
@@ -178,6 +185,10 @@ canvas-tools-sidebar {
 }
 
 @media (max-width: 768px) {
+  html,
+  body {
+    overflow-y: auto;
+  }
   .container {
     flex-direction: column;
   }
@@ -187,6 +198,7 @@ canvas-tools-sidebar {
   }
   canvas-area {
     width: 100%;
+    max-height: 500px;
   }
   canvas-tools-sidebar {
     width: 100%;
@@ -203,7 +215,7 @@ canvas-tools-sidebar {
   }
 
   .canvas-wrapper {
-    min-height: 400px;
+    max-height: 400px;
   }
 
   .layer-sidebar {
@@ -328,13 +340,21 @@ canvas-tools-sidebar {
 }
 
 .modal-input-group {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
   margin: 10px 0;
 }
-
+.modal-input-group label {
+  width: 100%;
+}
 .modal-content input {
-  width: 100px;
+  width: 80%;
   padding: 5px;
   margin-left: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 2px;
+  font-size: 14px;
 }
 
 .modal-content button {

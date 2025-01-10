@@ -87,8 +87,8 @@ export default class DrawingService {
       endPoint.y = layer.y + layer.radius * 2;
     }
     if (layer.type === 'line') {
-      endPoint.x = layer.endX;
-      endPoint.y = layer.endY;
+      endPoint.x = layer.width;
+      endPoint.y = layer.height;
     }
 
     this.drawShape.draw(

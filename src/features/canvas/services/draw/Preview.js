@@ -1,29 +1,68 @@
 import ShapeFactory from './shapes/ShapeFactory.js';
 
+const SHAPE_TYPES = {
+  RECTANGLE: 'rectangle',
+  CIRCLE: 'circle',
+  LINE: 'line',
+};
+
 export default class Preview {
   constructor(context) {
     this.context = context;
     this.canvas = this.createPreviewCanvas();
     this.previewContext = this.canvas.getContext('2d');
+    this.initEventListeners();
+  }
+
+  handlePositionUpdate() {
+    const { top, left } = this.getCanvasPosition();
+    this.canvas.style.top = `${top}px`;
+    this.canvas.style.left = `${left}px`;
+  }
+
+  initEventListeners() {
+    this.handlePositionUpdate = this.handlePositionUpdate.bind(this);
+    this.scrollContainer = document.querySelector('.canvas-wrapper');
+    this.scrollContainer.addEventListener('scroll', this.handlePositionUpdate);
+    window.addEventListener('resize', this.handlePositionUpdate);
+  }
+
+  getCanvasPosition() {
+    const rect = this.context.canvas.getBoundingClientRect();
+    return {
+      top: rect.top - window.scrollY,
+      left: rect.left + window.scrollX,
+    };
   }
 
   createPreviewCanvas() {
     const canvas = document.createElement('canvas');
     canvas.width = this.context.canvas.width;
     canvas.height = this.context.canvas.height;
-    canvas.style.position = 'absolute';
-    canvas.style.pointerEvents = 'none';
 
-    const updatePosition = () => {
-      const rect = this.context.canvas.getBoundingClientRect();
-      canvas.style.top = `${rect.top}px`;
-      canvas.style.left = `${rect.left}px`;
-    };
-
-    updatePosition();
+    this.setCanvasStyles(canvas);
+    this.setCanvasPosition(canvas);
 
     this.context.canvas.parentNode.appendChild(canvas);
     return canvas;
+  }
+
+  setCanvasStyles(canvas) {
+    canvas.style.position = 'absolute';
+    canvas.style.pointerEvents = 'none';
+  }
+
+  setCanvasPosition(canvas) {
+    const { top, left } = this.getCanvasPosition();
+    canvas.style.top = `${top}px`;
+    canvas.style.left = `${left}px`;
+  }
+
+  calculateShapeSize(startPoint, currentPoint) {
+    return {
+      width: currentPoint.x - startPoint.x,
+      height: currentPoint.y - startPoint.y,
+    };
   }
 
   clear() {
@@ -32,48 +71,55 @@ export default class Preview {
 
   previewShape(type, startPoint, currentPoint) {
     this.clear();
+    const dimensions = this.calculateShapeSize(startPoint, currentPoint);
+    const shapeParams = this.getShapeParams(
+      type,
+      startPoint,
+      currentPoint,
+      dimensions
+    );
 
-    const width = currentPoint.x - startPoint.x;
-    const height = currentPoint.y - startPoint.y;
+    this.drawShape(type, shapeParams);
+  }
 
-    let shape;
+  drawShape(type, shapeParams) {
+    const shape = ShapeFactory.createShape(
+      type,
+      this.previewContext,
+      ...shapeParams
+    );
+    if (shape) {
+      shape.preview();
+    }
+  }
+
+  getShapeParams(type, startPoint, currentPoint, shapeSize) {
+    const { width, height } = shapeSize;
+
     switch (type) {
-      case 'rectangle':
-        shape = ShapeFactory.createShape(
-          'rectangle',
-          this.previewContext,
-          startPoint.x,
-          startPoint.y,
-          width,
-          height
-        );
-        break;
-      case 'circle':
-        const radius = Math.sqrt(width * width + height * height) / 2;
-        shape = ShapeFactory.createShape(
-          'circle',
-          this.previewContext,
-          startPoint.x,
-          startPoint.y,
-          radius
-        );
-        break;
-      case 'line':
-        shape = ShapeFactory.createShape(
-          'line',
-          this.previewContext,
+      case SHAPE_TYPES.RECTANGLE:
+        return [startPoint.x, startPoint.y, width, height];
+
+      case SHAPE_TYPES.CIRCLE:
+        const radius = this.calculateRadius(width, height);
+        return [startPoint.x, startPoint.y, radius];
+
+      case SHAPE_TYPES.LINE:
+        return [
           startPoint.x,
           startPoint.y,
           currentPoint.x,
           currentPoint.y,
           null,
-          {}
-        );
-        break;
-    }
+          {},
+        ];
 
-    if (shape) {
-      shape.preview();
+      default:
+        return [];
     }
+  }
+
+  calculateRadius(width, height) {
+    return Math.sqrt(width * width + height * height) / 2;
   }
 }
