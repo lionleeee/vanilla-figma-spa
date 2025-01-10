@@ -40,6 +40,7 @@ export default class ToolButton extends HTMLElement {
     this.isSelected = true;
     buttonElement.classList.add('selected');
     this.emitToolUpdate(toolName);
+
   }
 
   deselectAllTools() {

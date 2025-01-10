@@ -5,6 +5,12 @@ import { initDragAndDrop } from '../utils/dragAndDrop.js';
 import './CanvasSettingModal.js';
 import { EVENTS } from '../../../core/event/Events.js';
 
+const CANVAS_TEMPLATE = `
+  <div class="canvas-wrapper">
+    <canvas id="drawingCanvas"></canvas>
+  </div>
+`;
+
 export default class CanvasArea extends HTMLElement {
   constructor() {
     super();
@@ -29,11 +35,13 @@ export default class CanvasArea extends HTMLElement {
   connectedCallback() {
     this.render();
     this.createCanvasSettingModal();
+
     this.handleCanvasEvents();
     this.handleLayerEvents();
     this.handleToolEvents();
     this.handlePropertyEvents();
     this.handleResetEvent();
+
     initDragAndDrop(this);
   }
   createCanvasSettingModal() {
@@ -95,6 +103,7 @@ export default class CanvasArea extends HTMLElement {
     this.resetCanvas();
     this.showCanvasSettingModal();
   }
+
 
   resetCanvas() {
     this.innerHTML = `
@@ -178,6 +187,7 @@ export default class CanvasArea extends HTMLElement {
     this.isDrawing = false;
     this.startX = null;
     this.startY = null;
+
   }
 
   redrawByZIndex(layers) {
@@ -185,11 +195,7 @@ export default class CanvasArea extends HTMLElement {
   }
 
   render() {
-    this.innerHTML = `
-    <div class="canvas-wrapper">
-      <canvas id="drawingCanvas" ></canvas>
-    </div>
-  `;
+    this.innerHTML = CANVAS_TEMPLATE;
   }
 
   initCanvas() {
