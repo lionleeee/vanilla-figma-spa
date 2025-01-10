@@ -15,8 +15,8 @@ export default class CanvasArea extends HTMLElement {
   constructor() {
     super();
     this.context = null;
-    this.width = null;
-    this.height = null;
+    this.width = 0;
+    this.height = 0;
     this.isDrawing = false;
     this.currentTool = null;
     this.currentProperty = {
@@ -101,9 +101,8 @@ export default class CanvasArea extends HTMLElement {
 
     this._layerService.clearLayers();
     this.resetCanvas();
-    this.showCanvasSettingModal();
+    this.createCanvasSettingModal();
   }
-
 
   resetCanvas() {
     this.innerHTML = `
@@ -187,7 +186,6 @@ export default class CanvasArea extends HTMLElement {
     this.isDrawing = false;
     this.startX = null;
     this.startY = null;
-
   }
 
   redrawByZIndex(layers) {
