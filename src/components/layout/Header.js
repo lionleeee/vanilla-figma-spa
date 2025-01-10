@@ -53,7 +53,7 @@ export default class Header extends HTMLElement {
         const buffer = await file.arrayBuffer();
         this.readFile(buffer);
       } catch (error) {
-        console.error('파일 불러오기 실패:', error);
+        alert('파일 불러오기를 실패했습니다. 다시 시도해주세요');
       }
     };
 

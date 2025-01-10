@@ -1,4 +1,5 @@
-import { eventBus } from '@/core/EventBus.js';
+import { eventBus } from '@/core/event/EventBus.js';
+import { EVENTS } from '../../../core/event/Events';
 
 export default class CanvasSettingModal extends HTMLElement {
   constructor() {
@@ -46,7 +47,7 @@ export default class CanvasSettingModal extends HTMLElement {
         return;
       }
 
-      eventBus.emit('CANVAS_CREATED', { width, height });
+      eventBus.emit(EVENTS.CANVAS.CREATED, { width, height });
       this.remove();
     });
   }
