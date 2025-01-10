@@ -1,5 +1,5 @@
 import { layerService } from '../../features/canvas/services/LayerService';
-import { binaryConverter } from '../../utils/binary/binaryConverter.js';
+import { binaryConverter } from '@/utils/binary/binaryConverter.js';
 
 export default class Header extends HTMLElement {
   connectedCallback() {
